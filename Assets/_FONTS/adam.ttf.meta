@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: ce379b0cd5318c6449ec3e66367282d0
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - adam warren 0.2
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e787b2703d40e734f8128218758d4c73, type: 3}
+  - {fileID: 12800000, guid: 7bc77a472af4fe743979a3c696cb1973, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
