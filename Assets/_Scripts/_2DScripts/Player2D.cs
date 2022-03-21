@@ -4,35 +4,26 @@ using UnityEngine;
 
 public class Player2D : MonoBehaviour
 {
-    [SerializeField]
     private UIManager _uiManager;
-    [SerializeField]
     public SpawnManager _spawnManager;
-    [SerializeField]
     private SoundManager _soundManager;
 
-    [SerializeField]
-    private float _speed = 3.5f;
-    [SerializeField]
+    private float _speed = 5f;
     private float _speedMultiplier = 1f;
     [SerializeField]
     private float _actualSpeed;
     
     [SerializeField]
     private GameObject _laserPrefab;
-    [SerializeField]
     private float _fireRate = 0.5f;
-    [SerializeField]
     private float _canFire = -1f;
 
-    [SerializeField]
     private int _lives = 3;
-    [SerializeField]
     private int _score = 0;
 
 
     [SerializeField]
-    private bool _isTripleShotActive = false;
+    private bool _isTripleShotActive;
     [SerializeField] 
     private bool _isSpeedActive;
     [SerializeField]
@@ -83,6 +74,15 @@ public class Player2D : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && (Time.time > _canFire))
         {
             FireLaser();
+        }
+
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _isSpeedActive = true;
+        }
+        else if(Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _isSpeedActive = false;
         }
 
         if(_isShieldActive)
@@ -146,15 +146,15 @@ public class Player2D : MonoBehaviour
         _isTripleShotActive = true;
         StartCoroutine(TripleShotPowerDownRoutine());
     }
-
     IEnumerator TripleShotPowerDownRoutine()
-    {      
-        yield return new WaitForSeconds(4.0f);
+    {
+        //_tripleShotPrefab;
+        yield return new WaitForSeconds(5.0f);
         _isTripleShotActive = false;
-        yield return new WaitForSeconds(1.0f);
     }
 
-//
+    //
+
     public void SpeedBoostActive()
     {
         Debug.Log("Speed");
@@ -162,19 +162,18 @@ public class Player2D : MonoBehaviour
         _speedVisualiser.SetActive(true);
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
-
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         _speedMultiplier = 2;
-        _isSpeedActive = false;
         yield return new WaitForSeconds(4.0f);
+        _isSpeedActive = false;
         _speedMultiplier = 1;
         _speedVisualiser.SetActive(false);
         yield return new WaitForSeconds(1.0f);
-
     }
 
     //
+
     public void ShieldsActive()
     {
         Debug.Log("Shields");
@@ -182,7 +181,6 @@ public class Player2D : MonoBehaviour
         _isShieldActive = true;
         StartCoroutine(ShieldPowerDownRoutine());
     }
-
     IEnumerator ShieldPowerDownRoutine()
     {
         _shieldVisualiser.SetActive(true);

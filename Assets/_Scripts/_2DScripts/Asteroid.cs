@@ -62,20 +62,17 @@ public class Asteroid : MonoBehaviour
         
         else if(other.tag == "Laser")
         {
-            Debug.Log("Laser Tag");
+            Debug.Log("Asteroid- collision Laser");
             _soundManager.ExplosionSound();
-
-            Instantiate(_explosionVisual,
-                        transform.position,
-                        Quaternion.identity);
-
+            //""""OnExplosion""""
+            Instantiate(_explosionVisual,transform.position,Quaternion.identity);
 
             //_audioSource.PlayOneShot(_explosionAudio, 4f);
             Destroy(other.gameObject);
             
             _spawnManager.StartSpawning();
 
-            Destroy(this.gameObject, 2f);
+            Destroy(this.gameObject, .2f);
         }
     }
 }

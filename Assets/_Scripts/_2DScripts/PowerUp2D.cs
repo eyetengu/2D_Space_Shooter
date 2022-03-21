@@ -13,9 +13,9 @@ public class PowerUp2D : MonoBehaviour
     [SerializeField]            //0 = tripleshot 1 = speed 2 = shield
     private int _powerupID;
 
-    //private int _tripleShotPowerUp = 0;
-    //private int _speedPowerUp = 1;
-    //private int _ShieldsPowerUp = 2;
+    private int _tripleShotPowerUp = 0;
+    private int _speedPowerUp = 1;
+    private int _ShieldsPowerUp = 2;
 
     [SerializeField]
     private SoundManager _soundManager;
@@ -52,13 +52,12 @@ public class PowerUp2D : MonoBehaviour
     {
          if(other.tag == "Player")
         {
-            Debug.Log("Collision Detected");
+            Debug.Log("PowerUP2.cs- Collision Detected");
 
             _soundManager.PowerUpSound();
 
-            Player2D _player2d = GameObject.Find("Player_2D").GetComponent<Player2D>();
-            if(_player2d == null)            
-            {
+            //if(_player2d == null)            
+            //{
                 switch (_powerupID)
                     {
                         case 0:
@@ -78,7 +77,7 @@ public class PowerUp2D : MonoBehaviour
                         Debug.Log("default");
                             break;
                     }
-            }
+            //}
 
             Debug.Log("NO WAY");
             Debug.Log(_powerupID);
