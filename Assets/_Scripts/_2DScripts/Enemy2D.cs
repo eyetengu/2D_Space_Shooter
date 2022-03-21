@@ -11,7 +11,8 @@ public class Enemy2D : MonoBehaviour
     private Player2D _player;
     private Animator _animator;
     private BoxCollider2D _collider;
-    private AudioSource _audioSource;
+    //private AudioSource _audioSource;
+    private SoundManager _soundManager;
 
     void Start()
     {
@@ -35,11 +36,19 @@ public class Enemy2D : MonoBehaviour
             Debug.LogError("Enemy2d.cs- Unable to locate BoxCollider2D");
         }
 
-        _audioSource = GetComponent<AudioSource>();
-        if(_audioSource == null)
+        //_audioSource = GetComponent<AudioSource>();
+        //if(_audioSource == null)
+        //{
+            //Debug.LogError("Enemy2D.cs- AudioSource is null");
+        //}
+
+        _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
+        if(_soundManager == null)
         {
-            Debug.LogError("Enemy2D.cs- AudioSource is null");
+            Debug.LogError("Enemy2D.cs- SoundManager Not Found");
         }
+
+
     }
 
     void Update()
@@ -60,8 +69,10 @@ public class Enemy2D : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+            _soundManager.ExplosionSound();
         if(other.tag == "Player")
         {
+
             Player2D player = other.transform.GetComponent<Player2D>();
 
             if(player != null)
@@ -71,17 +82,19 @@ public class Enemy2D : MonoBehaviour
 
             _animator.SetTrigger("OnEnemyDeath");
             _speed = 0;
-            _audioSource.Play();
+            //_audioSource.Play();
+            //_soundManager.ExplosionSound();
             Destroy(this.gameObject, 2f);
         }
         if(other.tag == "Laser")
         {
+            Debug.Log("Laser Contact");
             Destroy(_collider);
+            _animator.SetTrigger("OnEnemyDeath");
             _speed = 0;
-            _audioSource.Play();
+            //_audioSource.Play();
             Destroy(other.gameObject);
             _player.UpdateScore();
-            _animator.SetTrigger("OnEnemyDeath");
             Destroy(this.gameObject, 2f);
         }  
     }

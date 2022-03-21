@@ -5,6 +5,13 @@ using UnityEngine;
 public class Player2D : MonoBehaviour
 {
     [SerializeField]
+    private UIManager _uiManager;
+    [SerializeField]
+    public SpawnManager _spawnManager;
+    [SerializeField]
+    private SoundManager _soundManager;
+
+    [SerializeField]
     private float _speed = 3.5f;
     [SerializeField]
     private float _speedMultiplier = 1f;
@@ -23,10 +30,6 @@ public class Player2D : MonoBehaviour
     [SerializeField]
     private int _score = 0;
 
-    [SerializeField]
-    public SpawnManager _spawnManager;
-    [SerializeField]
-    private UIManager _uiManager;
 
     [SerializeField]
     private bool _isTripleShotActive = false;
@@ -47,9 +50,6 @@ public class Player2D : MonoBehaviour
     [SerializeField]
     private GameObject _rightEngine;
 
-    //private AudioSource _audioSource;
-    [SerializeField]
-    //private AudioClip _laserSoundClip;
 
     void Start()
     {
@@ -63,18 +63,14 @@ public class Player2D : MonoBehaviour
         if(_spawnManager == null)
         {
             Debug.LogError("Player.cs- Unable to Locate SpawnManager");
-        }        
+        }
 
-        //_audioSource = GetComponent<AudioSource>();
-        //if(_audioSource == null)
-        //{
-            //Debug.LogError("Player.cs- AudioSource is missing");
-        //}
-        //else
-        //{
-            //_audioSource.clip = _laserSoundClip;
-        //}
-
+        _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
+        if(_soundManager == null)
+        {
+            Debug.LogError("Player2D.cs- SoundManager not found");
+        }
+        
         transform.position = new Vector3(0, 0, 0);
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -91,7 +87,7 @@ public class Player2D : MonoBehaviour
 
         if(_isShieldActive)
             {
-                //Debug.Log("Whoa, Fella");
+                ShieldsActive();
             }
 
         if(_isSpeedActive)
@@ -137,28 +133,31 @@ public class Player2D : MonoBehaviour
             else
             {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
-            }    
-
-            //_audioSource.Play();
+            }
+            _soundManager.LaserSound();
         }
     }
 
 //PowerUp Logic
     public void TripleShotActive()
-    {   
+    {
+        Debug.Log("3xShot");
+
         _isTripleShotActive = true;
         StartCoroutine(TripleShotPowerDownRoutine());
     }
 
     IEnumerator TripleShotPowerDownRoutine()
     {      
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(4.0f);
         _isTripleShotActive = false;
+        yield return new WaitForSeconds(1.0f);
     }
 
 //
     public void SpeedBoostActive()
     {
+        Debug.Log("Speed");
         _isSpeedActive = true; 
         _speedVisualiser.SetActive(true);
         StartCoroutine(SpeedBoostPowerDownRoutine());
@@ -168,14 +167,18 @@ public class Player2D : MonoBehaviour
     {
         _speedMultiplier = 2;
         _isSpeedActive = false;
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(4.0f);
         _speedMultiplier = 1;
         _speedVisualiser.SetActive(false);
+        yield return new WaitForSeconds(1.0f);
+
     }
 
-//
+    //
     public void ShieldsActive()
     {
+        Debug.Log("Shields");
+
         _isShieldActive = true;
         StartCoroutine(ShieldPowerDownRoutine());
     }

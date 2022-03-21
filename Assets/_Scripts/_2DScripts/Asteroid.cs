@@ -8,11 +8,14 @@ public class Asteroid : MonoBehaviour
     private float _rotateSpeed = 3.0f;
 
     [SerializeField]
-    private GameObject _explosion;
+    private GameObject _explosionVisual;
 
     [SerializeField]
     private SpawnManager _spawnManager;
-    //private AudioSource _audioSource;
+    private AudioSource _audioSource;
+    [SerializeField]
+    private AudioClip _explosionAudio;
+    private SoundManager _soundManager;
 
     void Start()
     {
@@ -20,14 +23,19 @@ public class Asteroid : MonoBehaviour
         if( _spawnManager == null )
         {
             Debug.LogError("Asteroid.cs- SpawnManage is null");
-
         }
 
-        //_audioSource = GetComponent<AudioSource>();
-        //if(_audioSource == null)
-        //{
-            //Debug.LogError("Asteroid.cs- AudioSource is null");
-        //}
+        _audioSource = GetComponent<AudioSource>();
+        if(_audioSource == null)
+        {
+            Debug.LogError("Asteroid.cs- AudioSource is null");
+        }
+
+        _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
+        if(_soundManager == null)
+        {
+            Debug.LogError("Asteroid.cs- SoundManager Not Found");
+        }
     }
 
     void Update()
@@ -51,14 +59,23 @@ public class Asteroid : MonoBehaviour
             Debug.Log("Touche");
             Debug.Log("My Impenetrable Skin is Triggerable");
         }
-
+        
         else if(other.tag == "Laser")
         {
-            Instantiate(_explosion, transform.position, Quaternion.identity);
+            Debug.Log("Laser Tag");
+            _soundManager.ExplosionSound();
+
+            Instantiate(_explosionVisual,
+                        transform.position,
+                        Quaternion.identity);
+
+
+            //_audioSource.PlayOneShot(_explosionAudio, 4f);
             Destroy(other.gameObject);
+            
             _spawnManager.StartSpawning();
-            Destroy(this.gameObject, .4f);
-            //_audioSource.PlayOneShot();
+
+            Destroy(this.gameObject, 2f);
         }
     }
 }
