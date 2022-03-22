@@ -7,7 +7,6 @@ public class UIManager : MonoBehaviour
 {
     private GameManager _gameManager;
 
-    public Text _livesUI;
     public Text _scoreUI;
     public Text _gameOverText;
     public Text _restartText;
@@ -16,6 +15,10 @@ public class UIManager : MonoBehaviour
     private Sprite[] _liveSprites;
     private Image _livesImg;
 
+    [SerializeField]
+    private Sprite[] _shieldSprites;
+    private Image _shieldsImg;
+
     public int fontSize = 24;
 
 
@@ -23,9 +26,12 @@ public class UIManager : MonoBehaviour
     {
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
 
-        _livesUI = GameObject.Find("Health_text").GetComponent<Text>();
         _livesImg = GameObject.Find("Health_img").GetComponent<Image>();
+
+        _shieldsImg = GameObject.Find("Shields_img").GetComponent<Image>();
+
         _scoreUI = GameObject.Find("Score_text").GetComponent<Text>();
+
         _gameOverText = GameObject.Find("GameOver_text").GetComponent<Text>();
         _restartText = GameObject.Find("Restart_text").GetComponent<Text>();
     }
@@ -38,6 +44,22 @@ public class UIManager : MonoBehaviour
             GameOverSequence();
         }
     }
+
+    public void UpdateShieldsUI(int _shields)
+    {
+        Debug.Log("UIManager.cs- Shields");
+        _shieldsImg.sprite = _shieldSprites[_shields];
+        return;
+    }
+
+
+
+
+
+
+
+
+
 
     public void UpdateScoreUI(int _score)
     {

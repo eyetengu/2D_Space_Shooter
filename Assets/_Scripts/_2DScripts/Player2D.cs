@@ -21,13 +21,15 @@ public class Player2D : MonoBehaviour
     private int _lives = 3;
     private int _score = 0;
 
-
     [SerializeField]
     private bool _isTripleShotActive;
     [SerializeField] 
     private bool _isSpeedActive;
     [SerializeField]
     private bool _isShieldActive;
+
+    [SerializeField]
+    private int _shields = 0;
 
     [SerializeField]
     private GameObject _tripleShotPrefab; 
@@ -65,6 +67,9 @@ public class Player2D : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
 
         Cursor.lockState = CursorLockMode.Locked;
+
+        //Debug.Log("Player2d.cs- Shields at: " + _shields);
+
     }
 
     void Update()
@@ -85,17 +90,13 @@ public class Player2D : MonoBehaviour
             _isSpeedActive = false;
         }
 
-        if(_isShieldActive)
-            {
-                ShieldsActive();
-            }
-
         if(_isSpeedActive)
             {SpeedBoostActive();}
 
         if(_isTripleShotActive)
             {TripleShotActive();}
 
+        _uiManager.UpdateShieldsUI(_shields);
     }
 
     void PlayerMovement()
@@ -157,7 +158,7 @@ public class Player2D : MonoBehaviour
 
     public void SpeedBoostActive()
     {
-        Debug.Log("Speed");
+        //Debug.Log("Speed");
         _isSpeedActive = true; 
         _speedVisualiser.SetActive(true);
         StartCoroutine(SpeedBoostPowerDownRoutine());
@@ -175,34 +176,60 @@ public class Player2D : MonoBehaviour
     //
 
     public void ShieldsActive()
-    {
-        Debug.Log("Shields");
+    {                
+        _shieldVisualiser.SetActive(true);
 
-        _isShieldActive = true;
         StartCoroutine(ShieldPowerDownRoutine());
     }
     IEnumerator ShieldPowerDownRoutine()
     {
-        _shieldVisualiser.SetActive(true);
+        _shields += 3;
+        if(_shields > 3)
+        {
+            _shields = 3;
+        }
+        //_uiManager.UpdateShieldsUI(_shields);
+        Debug.Log("Player2d.cs- BLAHBLAH Shields at: " + _shields);
+        
+
+        _isShieldActive = true;
+
         yield return new WaitForSeconds(1.0f);
     }
 
 //Updates to the UI
     public void TakeDamage()
     {
-        if(_isShieldActive == true)
-        {
+        //when an enemy collides with the player
+        //check for shield, damage shield / damage player
+        //check to see if shield is present
+        //if yes- return without damage to the player
+            //decrement the shield by 1
+            //if shield is =<0
+                //isShieldReady = false;
+        //if no- damage player
+        if(_isShieldActive == true && _shields > -1)
+        { 
+            _shields--;
+            Debug.Log(_shields); 
+
+            if(_shields == 0)
+            { 
+            _shieldVisualiser?.SetActive(false);
             _isShieldActive = false;
-            _shieldVisualiser.SetActive(false);
-            return;
+            }
+        } 
+        else 
+        {
+            _lives --;
         }
 
-        _lives --;
-
-        switch(_lives)
+        switch (_lives)
         {
             case 2:
                 _leftEngine.SetActive(true);
+                Debug.Log("Breadcrumb 3");
+
                 break;
             case 1:
                 _rightEngine.SetActive(true);

@@ -63,15 +63,15 @@ public class PowerUp2D : MonoBehaviour
                         case 0:
                         Debug.Log("Case 0");
                             _player2d.TripleShotActive();
-                            Debug.Log("3X Shot");
+                            //Debug.Log("3X Shot");
                             break;
                         case 1:
                             _player2d.SpeedBoostActive();
-                            Debug.Log("Speed");
+                            //Debug.Log("Speed");
                             break;
                         case 2:
                             _player2d.ShieldsActive();
-                            Debug.Log("Shield");
+                            //Debug.Log("Shield");
                             break;
                         default:
                         Debug.Log("default");
@@ -79,7 +79,7 @@ public class PowerUp2D : MonoBehaviour
                     }
             //}
 
-            Debug.Log("NO WAY");
+            //Debug.Log("NO WAY");
             Debug.Log(_powerupID);
 
             Destroy(this.gameObject);
