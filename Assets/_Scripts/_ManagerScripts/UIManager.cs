@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
 
     public int fontSize = 24;
 
+    [SerializeField]
+    private Slider _fuelCellsSlider;
 
     void Start()
     {
@@ -34,6 +36,12 @@ public class UIManager : MonoBehaviour
 
         _gameOverText = GameObject.Find("GameOver_text").GetComponent<Text>();
         _restartText = GameObject.Find("Restart_text").GetComponent<Text>();
+
+        _fuelCellsSlider = GameObject.Find("Fuel_Cells").GetComponent<Slider>();
+        if(_fuelCellsSlider == null)
+        { Debug.LogError("UIManager.cs- Slider not found"); }
+
+
     }
 
     public void UpdateHealthUI(int _lives)
@@ -52,14 +60,11 @@ public class UIManager : MonoBehaviour
         return;
     }
 
-
-
-
-
-
-
-
-
+    public void UpdateFuelCellsUI(float _fuelCells)
+    {
+        Debug.Log("UIManager- _fuelCells " + _fuelCells);
+        _fuelCellsSlider.value = _fuelCells;
+    }
 
     public void UpdateScoreUI(int _score)
     {

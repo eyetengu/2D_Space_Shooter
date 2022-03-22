@@ -7,6 +7,8 @@ public class Player2D : MonoBehaviour
     private UIManager _uiManager;
     public SpawnManager _spawnManager;
     private SoundManager _soundManager;
+    [SerializeField]
+    private Enemy2D _enemy2d;
 
     private float _speed = 5f;
     private float _speedMultiplier = 1f;
@@ -43,6 +45,10 @@ public class Player2D : MonoBehaviour
     [SerializeField]
     private GameObject _rightEngine;
 
+    private float _fuelCells = 0;
+    private bool _hasFuelCells = false;
+
+    private bool _speedUpEnemy = false;
 
     void Start()
     {
@@ -64,12 +70,17 @@ public class Player2D : MonoBehaviour
             Debug.LogError("Player2D.cs- SoundManager not found");
         }
         
+        _uiManager.UpdateFuelCellsUI(_fuelCells);
+
+        //_enemy2d = GameObject.Find("Enemy2D").GetComponent<Enemy2D>();
+        //if(_enemy2d == null)
+        //{
+            //Debug.LogError("Player2D.cs- Enemy2D is Null");
+        //}
+
         transform.position = new Vector3(0, 0, 0);
 
         Cursor.lockState = CursorLockMode.Locked;
-
-        //Debug.Log("Player2d.cs- Shields at: " + _shields);
-
     }
 
     void Update()
@@ -81,17 +92,11 @@ public class Player2D : MonoBehaviour
             FireLaser();
         }
 
-        if(Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            _isSpeedActive = true;
-        }
-        else if(Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            _isSpeedActive = false;
-        }
+        _enemy2d.FastEnemy(false);
+        
 
-        if(_isSpeedActive)
-            {SpeedBoostActive();}
+        //if(_isSpeedActive)
+            //{SpeedBoostActive();}
 
         if(_isTripleShotActive)
             {TripleShotActive();}
@@ -101,24 +106,55 @@ public class Player2D : MonoBehaviour
 
     void PlayerMovement()
     {
+        //Base Movement
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
-                Vector3 velocity = direction * _speed * _speedMultiplier * Time.deltaTime;
-                transform.Translate(velocity);
-                _actualSpeed = _speed * _speedMultiplier;
-           
-       
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -5f, 0), 0);        
-        
-         if(transform.position.x >= 11)
-         {            transform.position = new Vector3(-11, transform.position.y, 0);        }
-    
-         else if(transform.position.x <= -11)
-         {            transform.position = new Vector3(11, transform.position.y, 0);        }
+        Vector3 velocity = direction * _speed * _speedMultiplier * Time.deltaTime;
+        transform.Translate(velocity);
+        _actualSpeed = _speed * _speedMultiplier;
 
+        //Setting Player Bounds       
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -5f, 0), 0);
+
+        if (transform.position.x >= 11)
+        { transform.position = new Vector3(-11, transform.position.y, 0); }
+
+        else if (transform.position.x <= -11)
+        { transform.position = new Vector3(11, transform.position.y, 0); }
+
+        //SPEED BOOST
+        if (_hasFuelCells == true && _fuelCells > 0)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                if (_isSpeedActive == false)
+                {
+                    _isSpeedActive = true;
+                    _speedVisualiser.SetActive(true);
+                    _speedMultiplier = 2;
+                    _speedUpEnemy = true;
+                    _enemy2d.FastEnemy(_speedUpEnemy);
+                    
+                }
+
+                else if (_isSpeedActive == true)
+                {
+                    _isSpeedActive = false;
+                    _speedVisualiser.SetActive(false);
+                    _speedMultiplier = 1;
+                    Debug.Log("SpeedBoost IS NOT active");                    
+                }                
+            }
+        }
+        else 
+        {
+            _isSpeedActive = false;
+            _speedVisualiser.SetActive(false);
+            _speedMultiplier = 1;       
+        }
     }
 
     private void FireLaser()
@@ -136,7 +172,7 @@ public class Player2D : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
             }
             _soundManager.LaserSound();
-        }
+        }        
     }
 
 //PowerUp Logic
@@ -158,22 +194,21 @@ public class Player2D : MonoBehaviour
 
     public void SpeedBoostActive()
     {
-        //Debug.Log("Speed");
-        _isSpeedActive = true; 
-        _speedVisualiser.SetActive(true);
-        StartCoroutine(SpeedBoostPowerDownRoutine());
-    }
-    IEnumerator SpeedBoostPowerDownRoutine()
-    {
-        _speedMultiplier = 2;
-        yield return new WaitForSeconds(4.0f);
-        _isSpeedActive = false;
-        _speedMultiplier = 1;
-        _speedVisualiser.SetActive(false);
-        yield return new WaitForSeconds(1.0f);
-    }
+        _fuelCells += 1;
+        if(_fuelCells > 5)
+        { 
+            _fuelCells = 5;
+        }
+        else
+        {
+            _fuelCells = _fuelCells;
+        }
+        Debug.Log("Fuel Check");
+        _uiManager.UpdateFuelCellsUI(_fuelCells);
 
-    //
+        _hasFuelCells = true;
+        Debug.Log("SpeedCells Acquired");
+    }
 
     public void ShieldsActive()
     {                
