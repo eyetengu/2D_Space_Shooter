@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public Text _scoreUI;
     public Text _gameOverText;
     public Text _restartText;
+    public Text _gamePlayMessages;
 
     [SerializeField]
     private Sprite[] _liveSprites;
@@ -36,6 +37,7 @@ public class UIManager : MonoBehaviour
 
         _gameOverText = GameObject.Find("GameOver_text").GetComponent<Text>();
         _restartText = GameObject.Find("Restart_text").GetComponent<Text>();
+        _gamePlayMessages = GameObject.Find("GamePlayMessages_text").GetComponent<Text>();
 
         _fuelCellsSlider = GameObject.Find("Fuel_Cells").GetComponent<Slider>();
         if(_fuelCellsSlider == null)
@@ -100,6 +102,23 @@ public class UIManager : MonoBehaviour
         
         GameOverSequence();
 
+    }
+
+    public void GamePlayMessages(int _gamePlayMessenger)
+    {
+        switch(_gamePlayMessenger)
+        {
+            case 0:
+                _gamePlayMessages.text = "";
+                break;
+            case 1:
+                _gamePlayMessages.text = "RELOAD";
+                break;
+            default:
+                break;
+        }
+        //_restartText.text = _gamePlayMessages;
+        //_restartText.text = _gamePlayMessages;
     }
 
 }

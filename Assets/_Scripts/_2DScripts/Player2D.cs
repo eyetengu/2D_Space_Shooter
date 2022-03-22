@@ -7,6 +7,9 @@ public class Player2D : MonoBehaviour
     private UIManager _uiManager;
     public SpawnManager _spawnManager;
     private SoundManager _soundManager;
+
+    public int _gamePlayMessenger;
+
     [SerializeField]
     private Enemy2D _enemy2d;
 
@@ -19,6 +22,9 @@ public class Player2D : MonoBehaviour
     private GameObject _laserPrefab;
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
+    [SerializeField]
+    private int _ammoCount = 3;
+    private float _hasAmmo;
 
     private int _lives = 3;
     private int _score = 0;
@@ -72,12 +78,6 @@ public class Player2D : MonoBehaviour
         
         _uiManager.UpdateFuelCellsUI(_fuelCells);
 
-        //_enemy2d = GameObject.Find("Enemy2D").GetComponent<Enemy2D>();
-        //if(_enemy2d == null)
-        //{
-            //Debug.LogError("Player2D.cs- Enemy2D is Null");
-        //}
-
         transform.position = new Vector3(0, 0, 0);
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -89,14 +89,20 @@ public class Player2D : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space) && (Time.time > _canFire))
         {
-            FireLaser();
+            if (_ammoCount > 0)
+            {
+                _gamePlayMessenger = 0;
+                FireLaser();
+            }
+            else
+            {
+                _gamePlayMessenger = 1;
+            }
+                _uiManager.GamePlayMessages(_gamePlayMessenger);
+
         }
 
-        _enemy2d.FastEnemy(false);
-        
-
-        //if(_isSpeedActive)
-            //{SpeedBoostActive();}
+      
 
         if(_isTripleShotActive)
             {TripleShotActive();}
@@ -159,22 +165,22 @@ public class Player2D : MonoBehaviour
 
     private void FireLaser()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        _canFire = Time.time + _fireRate;
+
+        if(_isTripleShotActive == true)
         {
-            _canFire = Time.time + _fireRate;
-
-            if(_isTripleShotActive == true)
-            {
-                Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);  
-            }
-            else
-            {
+            Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
+            _ammoCount -= 3;            
+        }
+        else
+        {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
-            }
+            _ammoCount--;
+        }
             _soundManager.LaserSound();
-        }        
-    }
-
+            Debug.Log("AmmoCount- " + _ammoCount);
+    }    
+        
 //PowerUp Logic
     public void TripleShotActive()
     {
