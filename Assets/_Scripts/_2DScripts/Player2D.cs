@@ -87,6 +87,8 @@ public class Player2D : MonoBehaviour
     {
         PlayerMovement();
 
+        _uiManager.AmmoCountUpdate(_ammoCount);
+
         if(Input.GetKeyDown(KeyCode.Space) && (Time.time > _canFire))
         {
             if (_ammoCount > 0)
@@ -99,10 +101,7 @@ public class Player2D : MonoBehaviour
                 _gamePlayMessenger = 1;
             }
                 _uiManager.GamePlayMessages(_gamePlayMessenger);
-
-        }
-
-      
+        }     
 
         if(_isTripleShotActive)
             {TripleShotActive();}
@@ -195,9 +194,7 @@ public class Player2D : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         _isTripleShotActive = false;
     }
-
     //
-
     public void SpeedBoostActive()
     {
         _fuelCells += 1;
@@ -215,7 +212,7 @@ public class Player2D : MonoBehaviour
         _hasFuelCells = true;
         Debug.Log("SpeedCells Acquired");
     }
-
+    //
     public void ShieldsActive()
     {                
         _shieldVisualiser.SetActive(true);
@@ -237,6 +234,20 @@ public class Player2D : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
     }
+    //
+    public void AmmoIncrease()
+    {
+        _ammoCount = 15;
+        if(_ammoCount > 15)
+        {
+            _ammoCount = 15;
+        }
+    }
+
+    //public void HealthIncrease()
+    //{
+        //Debug.Log("Health Powerup PickedUp");
+    //}
 
 //Updates to the UI
     public void TakeDamage()

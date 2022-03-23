@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public Text _gameOverText;
     public Text _restartText;
     public Text _gamePlayMessages;
+    public Text _ammoText;
 
     [SerializeField]
     private Sprite[] _liveSprites;
@@ -38,6 +39,9 @@ public class UIManager : MonoBehaviour
         _gameOverText = GameObject.Find("GameOver_text").GetComponent<Text>();
         _restartText = GameObject.Find("Restart_text").GetComponent<Text>();
         _gamePlayMessages = GameObject.Find("GamePlayMessages_text").GetComponent<Text>();
+        _ammoText = GameObject.Find("Ammo_text").GetComponent<Text>();
+
+
 
         _fuelCellsSlider = GameObject.Find("Fuel_Cells").GetComponent<Slider>();
         if(_fuelCellsSlider == null)
@@ -79,6 +83,7 @@ public class UIManager : MonoBehaviour
     {
         _gameOverText.text = "Game Over!";
         _restartText.text = "Press R to Restart";
+        _gamePlayMessages.text = "";
         StartCoroutine(GameOverFlickerRoutine());
         _gameManager.GameOver();
     }
@@ -119,6 +124,12 @@ public class UIManager : MonoBehaviour
         }
         //_restartText.text = _gamePlayMessages;
         //_restartText.text = _gamePlayMessages;
+    }
+    
+    public void AmmoCountUpdate(int _ammoCount)
+    {
+        _ammoText.text = _ammoCount.ToString();
+        Debug.Log("Ready for Ammo Count");
     }
 
 }

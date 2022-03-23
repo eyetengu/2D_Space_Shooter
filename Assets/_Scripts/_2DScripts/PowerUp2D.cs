@@ -17,6 +17,9 @@ public class PowerUp2D : MonoBehaviour
     private int _speedPowerUp = 1;
     private int _ShieldsPowerUp = 2;
 
+    private int _ammoPowerUp = 3;
+    //private int _healthPowerUp = 4;
+
     [SerializeField]
     private SoundManager _soundManager;
     //private AudioClip _clip;
@@ -36,7 +39,6 @@ public class PowerUp2D : MonoBehaviour
         }
 
         transform.position = new Vector3(Random.Range(-8, 8), 6, 0);
-        //Debug.Log("PowerUp2D.cs- powerup presenting");
     }    
 
     void Update()
@@ -73,14 +75,18 @@ public class PowerUp2D : MonoBehaviour
                             _player2d.ShieldsActive();
                             //Debug.Log("Shield");
                             break;
+
+                        case 3:
+                            _player2d.AmmoIncrease();
+                            break;
+                        //case 4:
+                            //_player2d.HealthIncrease();
+                            //break;
+
                         default:
                         Debug.Log("default");
                             break;
                     }
-            //}
-
-            //Debug.Log("NO WAY");
-            Debug.Log(_powerupID);
 
             Destroy(this.gameObject);
          }
