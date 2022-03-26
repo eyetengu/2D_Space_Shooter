@@ -6,7 +6,9 @@ public class Enemy2D : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 4.0f;
-    private float enemySpeedMultiplier = 1.5f;
+    private float _enemySpeedMultiplier = 3f;
+    [SerializeField]
+    private float _currentSpeed;
 
     [SerializeField]
     private Player2D _player;
@@ -15,7 +17,6 @@ public class Enemy2D : MonoBehaviour
     private SoundManager _soundManager;
 
     private bool speedBool = false;
-
 
     void Start()
     {
@@ -49,6 +50,7 @@ public class Enemy2D : MonoBehaviour
     void Update()
     {
         EnemyMovement();
+        _currentSpeed = _speed;
     }
 
     void EnemyMovement()
@@ -75,38 +77,46 @@ public class Enemy2D : MonoBehaviour
             }
 
             _animator.SetTrigger("OnEnemyDeath");
-            _speed = 0;
+            //_speed = 0;
             Destroy(this.gameObject, 2f);
         }
 
         if(other.tag == "Laser")
         {
-            Debug.Log("Laser Contact");
+            //Debug.Log("Laser Contact");
             Destroy(_collider);
             _animator.SetTrigger("OnEnemyDeath");
-            _speed = 0;
+            //_speed = 0;
+
             //_audioSource.Play();
             Destroy(other.gameObject);
             _player.UpdateScore();
-            Destroy(this.gameObject, 2f);
+            Destroy(this, 2f);
         }  
     }
 
     public void FastEnemy(bool _speedUpEnemy)
     {
+        Debug.Log("FastEnemy");
         if(_speedUpEnemy == true)
         {
             Debug.Log("FastEnemy = true");
-            _speed =6f;    
+            _currentSpeed = _speed * _enemySpeedMultiplier;    
         }
-        else if(_speedUpEnemy == false)
+        
+        if(_speedUpEnemy == false)
         {
             Debug.Log("FastEnemy = false");
-            _speed = 4f;
+            _currentSpeed = _speed;
         }
     }
 
-    
+    public void EnemyTakeDamage()
+    {
+        _animator.SetTrigger("OnEnemyDeath");
+        Destroy(this.gameObject);
+
+    }
 
 
 

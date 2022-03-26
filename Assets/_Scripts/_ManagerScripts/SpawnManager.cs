@@ -17,6 +17,7 @@ public class SpawnManager : MonoBehaviour
 
     private UIManager _uiManager;
 
+    private float _rarePUTimer;
 
     void Start()
     {
@@ -25,13 +26,13 @@ public class SpawnManager : MonoBehaviour
         {
             Debug.Log("UIManager Not Located(SpawnManager)");
         }
-
     }
 
     public void StartSpawning()
     {
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUpRoutine());
+        StartCoroutine(SpawnRarePowerUpRoutine());
     }
 
     public void PlayerDeath()
@@ -44,26 +45,42 @@ public class SpawnManager : MonoBehaviour
     {
         while(_stopSpawning == false)
         {
+            yield return new WaitForSeconds(.5f);
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 6, 0);
             GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
             
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(2.5f);
         }
     }
     IEnumerator SpawnPowerUpRoutine()
     {
         while(_stopSpawning == false)
         {
+            yield return new WaitForSeconds(Random.Range(5, 8f));
 
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 6, 0);
 
-            int randomPowerUp = Random.Range(0,4);
+            int randomPowerUp = Random.Range(0,5);
             Instantiate(_powerups[randomPowerUp], posToSpawn, Quaternion.identity);            
             
-            yield return new WaitForSeconds(Random.Range(5, 8f));
         }
     }
 
+    IEnumerator SpawnRarePowerUpRoutine()
+    {
+        while (_stopSpawning == false)
+        {
+
+            Debug.Log("SpawnRarePowerUpRoutine");
+            _rarePUTimer = Random.Range(20f, 30f);
+            yield return new WaitForSeconds(_rarePUTimer);
+
+            Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 6, 0);
+
+            Instantiate(_powerups[5], posToSpawn, Quaternion.identity);
+            Start();
+        }
+    }
 
 }

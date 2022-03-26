@@ -5,23 +5,23 @@ using UnityEngine;
 
 public class PowerUp2D : MonoBehaviour
 {
+    //[SerializeField]
+    private SoundManager _soundManager;
+    private Player2D _player2d;
+
     [SerializeField]
     private float _speed = 3f;
 
-    private Player2D _player2d;
-
     [SerializeField]            //0 = tripleshot 1 = speed 2 = shield
     private int _powerupID;
-
     private int _tripleShotPowerUp = 0;
     private int _speedPowerUp = 1;
     private int _ShieldsPowerUp = 2;
 
     private int _ammoPowerUp = 3;
     //private int _healthPowerUp = 4;
+    private int _bombPowerUp = 5;
 
-    [SerializeField]
-    private SoundManager _soundManager;
     //private AudioClip _clip;
 
     void Start()
@@ -54,8 +54,6 @@ public class PowerUp2D : MonoBehaviour
     {
          if(other.tag == "Player")
         {
-            Debug.Log("PowerUP2.cs- Collision Detected");
-
             _soundManager.PowerUpSound();
 
             //if(_player2d == null)            
@@ -63,28 +61,27 @@ public class PowerUp2D : MonoBehaviour
                 switch (_powerupID)
                     {
                         case 0:
-                        Debug.Log("Case 0");
                             _player2d.TripleShotActive();
-                            //Debug.Log("3X Shot");
                             break;
                         case 1:
                             _player2d.SpeedBoostActive();
-                            //Debug.Log("Speed");
                             break;
                         case 2:
                             _player2d.ShieldsActive();
-                            //Debug.Log("Shield");
                             break;
 
                         case 3:
                             _player2d.AmmoIncrease();
                             break;
-                        //case 4:
-                            //_player2d.HealthIncrease();
-                            //break;
+                        case 4:
+                            _player2d.HealthIncrease();
+                            break;
+
+                        case 5:
+                            _player2d.Weapon2ndary();
+                            break;
 
                         default:
-                        Debug.Log("default");
                             break;
                     }
 

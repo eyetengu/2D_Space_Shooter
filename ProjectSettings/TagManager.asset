@@ -8,6 +8,8 @@ TagManager:
   - Laser
   - SpawnManager
   - UIManager
+  - PowerUp
+  - Bomb
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Water
   - UI
   - Post Processing
-  - 
+  - Enemy
   - 
   - 
   - 

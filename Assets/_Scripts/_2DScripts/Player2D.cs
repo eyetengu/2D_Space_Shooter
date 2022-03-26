@@ -26,6 +26,7 @@ public class Player2D : MonoBehaviour
     private int _ammoCount = 3;
     private float _hasAmmo;
 
+    [SerializeField]
     private int _lives = 3;
     private int _score = 0;
 
@@ -36,13 +37,35 @@ public class Player2D : MonoBehaviour
     [SerializeField]
     private bool _isShieldActive;
 
+    //Weapon 2ndary
+    [SerializeField]
+    private GameObject _bombPrefab;
+    [SerializeField]
+    private GameObject _explosionPrefab;
+    private GameObject explosion;
+    private GameObject bomb;
+
+    private Transform _bombTransform;
+    private Transform _explosionTransform;
+
+    [SerializeField]
+    private bool _is2ndaryFireActive;
+    [SerializeField]
+    public float _fuse = 2f;
+    private float _blastRadius;
+
+    //private CircleCollider2D _collider2D;
+    //public bool _timedDetonate;
+    //private GameObject _powerUp_2ndaryWeapon_prefab;
+    //END//
+
     [SerializeField]
     private int _shields = 0;
+    [SerializeField]
+    private GameObject _shieldVisualiser;
 
     [SerializeField]
     private GameObject _tripleShotPrefab; 
-    [SerializeField]
-    private GameObject _shieldVisualiser;
     [SerializeField]
     private GameObject _speedVisualiser;
 
@@ -51,9 +74,8 @@ public class Player2D : MonoBehaviour
     [SerializeField]
     private GameObject _rightEngine;
 
-    private float _fuelCells = 0;
+    private float _fuelCells = 3;
     private bool _hasFuelCells = false;
-
     private bool _speedUpEnemy = false;
 
     void Start()
@@ -80,6 +102,7 @@ public class Player2D : MonoBehaviour
 
         transform.position = new Vector3(0, 0, 0);
 
+        //_bombTransform = _bombPrefab.transform;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -88,17 +111,20 @@ public class Player2D : MonoBehaviour
         PlayerMovement();
 
         _uiManager.AmmoCountUpdate(_ammoCount);
+        _uiManager.UpdateShieldsUI(_shields);
+        //_collider2D = _bombPrefab.GetComponent<CircleCollider2D>();
 
-        if(Input.GetKeyDown(KeyCode.Space) && (Time.time > _canFire))
+        if (Input.GetKeyDown(KeyCode.Space) && (Time.time > _canFire))
         {
+            //Debug.Log("Space pressed");
             if (_ammoCount > 0)
             {
                 _gamePlayMessenger = 0;
                 FireLaser();
             }
-            else
+            else if(_ammoCount < 1)
             {
-                _gamePlayMessenger = 1;
+                //_gamePlayMessenger = 1;
             }
                 _uiManager.GamePlayMessages(_gamePlayMessenger);
         }     
@@ -106,7 +132,20 @@ public class Player2D : MonoBehaviour
         if(_isTripleShotActive)
             {TripleShotActive();}
 
-        _uiManager.UpdateShieldsUI(_shields);
+        if (_is2ndaryFireActive == true && Input.GetKey(KeyCode.E))
+        {
+            SecondaryFire();
+        }
+    }
+
+    private void SecondaryFire()
+    {
+            Debug.Log("2ndaryFire Activated");
+            bomb = Instantiate(_bombPrefab, transform.position + new Vector3(0, -0.5f, 0), Quaternion.identity);
+            
+            _is2ndaryFireActive = false;            
+            _explosionTransform = _bombTransform;
+            StartCoroutine(Powerup2ndaryExplosion2D());
     }
 
     void PlayerMovement()
@@ -131,27 +170,40 @@ public class Player2D : MonoBehaviour
         { transform.position = new Vector3(11, transform.position.y, 0); }
 
         //SPEED BOOST
-        if (_hasFuelCells == true && _fuelCells > 0)
+        if (_fuelCells > 0)
         {
+            GameObject[] enemies;
+            enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 if (_isSpeedActive == false)
                 {
+                    foreach (GameObject enemy in enemies)
+                    {
+                        _enemy2d.FastEnemy(_speedUpEnemy);
+                    }
                     _isSpeedActive = true;
                     _speedVisualiser.SetActive(true);
                     _speedMultiplier = 2;
                     _speedUpEnemy = true;
-                    _enemy2d.FastEnemy(_speedUpEnemy);
-                    
                 }
 
                 else if (_isSpeedActive == true)
                 {
+                    foreach (GameObject enemy in enemies)
+                    {
+                        _enemy2d.FastEnemy(_speedUpEnemy);
+                    }
                     _isSpeedActive = false;
                     _speedVisualiser.SetActive(false);
                     _speedMultiplier = 1;
-                    Debug.Log("SpeedBoost IS NOT active");                    
+                    _speedUpEnemy = false;
                 }                
+            }
+            foreach (GameObject enemy in enemies)
+            {
+                _enemy2d.FastEnemy(_speedUpEnemy);
             }
         }
         else 
@@ -164,27 +216,33 @@ public class Player2D : MonoBehaviour
 
     private void FireLaser()
     {
+        if(_ammoCount < 2)
+        {
+            _gamePlayMessenger = 1;
+            _uiManager.GamePlayMessages(_gamePlayMessenger);
+        }
         _canFire = Time.time + _fireRate;
+
 
         if(_isTripleShotActive == true)
         {
             Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
-            _ammoCount -= 3;            
+            _ammoCount -= 3;    
+            if(_ammoCount < 1)
+            { _ammoCount = 0; }
         }
         else
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
             _ammoCount--;
         }
-            _soundManager.LaserSound();
-            Debug.Log("AmmoCount- " + _ammoCount);
+        _soundManager.LaserSound();
+        //Debug.Log("AmmoCount- " + _ammoCount);
     }    
         
 //PowerUp Logic
     public void TripleShotActive()
     {
-        Debug.Log("3xShot");
-
         _isTripleShotActive = true;
         StartCoroutine(TripleShotPowerDownRoutine());
     }
@@ -206,11 +264,9 @@ public class Player2D : MonoBehaviour
         {
             _fuelCells = _fuelCells;
         }
-        Debug.Log("Fuel Check");
         _uiManager.UpdateFuelCellsUI(_fuelCells);
 
         _hasFuelCells = true;
-        Debug.Log("SpeedCells Acquired");
     }
     //
     public void ShieldsActive()
@@ -226,10 +282,7 @@ public class Player2D : MonoBehaviour
         {
             _shields = 3;
         }
-        //_uiManager.UpdateShieldsUI(_shields);
-        Debug.Log("Player2d.cs- BLAHBLAH Shields at: " + _shields);
-        
-
+        //_uiManager.UpdateShieldsUI(_shields);      
         _isShieldActive = true;
 
         yield return new WaitForSeconds(1.0f);
@@ -243,23 +296,65 @@ public class Player2D : MonoBehaviour
             _ammoCount = 15;
         }
     }
+    //
+    public void HealthIncrease()
+    {
+        _lives++;
+        if (_lives > 3)
+        { _lives = 3; }
+        Debug.Log("Lives " + _lives);
+        _uiManager.UpdateHealthUI(_lives);
+        switch (_lives)
+        {
+            case 3:
+                _leftEngine.SetActive(false);
+                _rightEngine.SetActive(false);
+                break;
+            case 2:
+                _leftEngine.SetActive(true);
+                _rightEngine.SetActive(false);
+                break;
+            case 1:
+                _leftEngine.SetActive(true);
+                _rightEngine.SetActive(true);
+                break;
+            case 0:
+                break;
+        }
+    }
+    //
+    public void Weapon2ndary()
+    {
+        _is2ndaryFireActive = true;
+        Debug.Log("2ndaryFire Capable");
+    }
 
-    //public void HealthIncrease()
-    //{
-        //Debug.Log("Health Powerup PickedUp");
-    //}
+    IEnumerator Powerup2ndaryExplosion2D()
+    {
+        Debug.Log("In the Coroutine Now");
 
-//Updates to the UI
+        yield return new WaitForSeconds(_fuse);
+        //explosion = Instantiate(_explosionPrefab, bomb.transform.position, Quaternion.identity);               
+        //Destroy(bomb);
+
+        GameObject[] enemies;
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach(GameObject enemy in enemies)
+        {
+            if(enemy != null)
+            {
+                float distance = Vector2.Distance(enemy.transform.position, bomb.transform.position);
+                if(distance < _blastRadius)
+                {
+                    _enemy2d.EnemyTakeDamage();
+                }
+            }
+        }
+    }
+
+    //Updates to the UI
     public void TakeDamage()
     {
-        //when an enemy collides with the player
-        //check for shield, damage shield / damage player
-        //check to see if shield is present
-        //if yes- return without damage to the player
-            //decrement the shield by 1
-            //if shield is =<0
-                //isShieldReady = false;
-        //if no- damage player
         if(_isShieldActive == true && _shields > -1)
         { 
             _shields--;
@@ -280,15 +375,13 @@ public class Player2D : MonoBehaviour
         {
             case 2:
                 _leftEngine.SetActive(true);
-                Debug.Log("Breadcrumb 3");
-
+                _rightEngine.SetActive(false);
                 break;
             case 1:
                 _rightEngine.SetActive(true);
                 break;
             case 0:
                 break;
-
         }
 
         _uiManager.UpdateHealthUI(_lives);
@@ -309,5 +402,12 @@ public class Player2D : MonoBehaviour
     {
         _score += 10;
         _uiManager.UpdateScoreUI(_score);
+    }
+
+
+    private void OnDrawGizmos() 
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, 2f); 
     }
 }

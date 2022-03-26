@@ -31,9 +31,7 @@ public class UIManager : MonoBehaviour
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
 
         _livesImg = GameObject.Find("Health_img").GetComponent<Image>();
-
         _shieldsImg = GameObject.Find("Shields_img").GetComponent<Image>();
-
         _scoreUI = GameObject.Find("Score_text").GetComponent<Text>();
 
         _gameOverText = GameObject.Find("GameOver_text").GetComponent<Text>();
@@ -41,13 +39,9 @@ public class UIManager : MonoBehaviour
         _gamePlayMessages = GameObject.Find("GamePlayMessages_text").GetComponent<Text>();
         _ammoText = GameObject.Find("Ammo_text").GetComponent<Text>();
 
-
-
-        _fuelCellsSlider = GameObject.Find("Fuel_Cells").GetComponent<Slider>();
+        _fuelCellsSlider = GameObject.Find("FuelCell_Slider").GetComponent<Slider>();
         if(_fuelCellsSlider == null)
         { Debug.LogError("UIManager.cs- Slider not found"); }
-
-
     }
 
     public void UpdateHealthUI(int _lives)
@@ -61,14 +55,14 @@ public class UIManager : MonoBehaviour
 
     public void UpdateShieldsUI(int _shields)
     {
-        Debug.Log("UIManager.cs- Shields");
+        //Debug.Log("UIManager.cs- Shields");
         _shieldsImg.sprite = _shieldSprites[_shields];
         return;
     }
 
     public void UpdateFuelCellsUI(float _fuelCells)
     {
-        Debug.Log("UIManager- _fuelCells " + _fuelCells);
+        //Debug.Log("UIManager- _fuelCells " + _fuelCells);
         _fuelCellsSlider.value = _fuelCells;
     }
 
@@ -84,6 +78,7 @@ public class UIManager : MonoBehaviour
         _gameOverText.text = "Game Over!";
         _restartText.text = "Press R to Restart";
         _gamePlayMessages.text = "";
+        
         StartCoroutine(GameOverFlickerRoutine());
         _gameManager.GameOver();
     }
@@ -122,14 +117,13 @@ public class UIManager : MonoBehaviour
             default:
                 break;
         }
-        //_restartText.text = _gamePlayMessages;
-        //_restartText.text = _gamePlayMessages;
+
     }
     
     public void AmmoCountUpdate(int _ammoCount)
     {
         _ammoText.text = _ammoCount.ToString();
-        Debug.Log("Ready for Ammo Count");
+        //Debug.Log("Ready for Ammo Count");
     }
 
 }

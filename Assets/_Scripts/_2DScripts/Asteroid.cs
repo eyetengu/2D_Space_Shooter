@@ -5,17 +5,18 @@ using UnityEngine;
 public class Asteroid : MonoBehaviour
 {
     [SerializeField]
+    private SpawnManager _spawnManager;
+    private SoundManager _soundManager;
+   
+    [SerializeField]
     private float _rotateSpeed = 3.0f;
 
     [SerializeField]
     private GameObject _explosionVisual;
 
     [SerializeField]
-    private SpawnManager _spawnManager;
-    private AudioSource _audioSource;
-    [SerializeField]
     private AudioClip _explosionAudio;
-    private SoundManager _soundManager;
+    private AudioSource _audioSource;
 
     void Start()
     {
@@ -40,8 +41,6 @@ public class Asteroid : MonoBehaviour
 
     void Update()
     {
-        //rotate object on the z axis
-        //use a speed of 3
         transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);
     }
 
@@ -62,17 +61,20 @@ public class Asteroid : MonoBehaviour
         
         else if(other.tag == "Laser")
         {
-            Debug.Log("Asteroid- collision Laser");
+            //Debug.Log("Asteroid- collision Laser");
             _soundManager.ExplosionSound();
-            //""""OnExplosion""""
+
             Instantiate(_explosionVisual,transform.position,Quaternion.identity);
 
-            //_audioSource.PlayOneShot(_explosionAudio, 4f);
             Destroy(other.gameObject);
             
             _spawnManager.StartSpawning();
 
             Destroy(this.gameObject, .2f);
+        }
+        else if(other.transform.tag == "Bomb")
+        {
+            Debug.Log("Presence sensed at asteroid");
         }
     }
 }
