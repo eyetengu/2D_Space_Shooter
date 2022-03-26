@@ -124,22 +124,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ac5806d76ec5840ac57a9d0e99768d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
-  _speedMultiplier: 1
+  _spawnManager: {fileID: 0}
+  _gamePlayMessenger: 0
+  _enemy2d: {fileID: 0}
   _actualSpeed: 0
   _laserPrefab: {fileID: 3677626486122912511, guid: 497c80ca662c59a4d9ec9ea695b33c42, type: 3}
-  _fireRate: 0.15
-  _canFire: -1
+  _ammoCount: 15
   _lives: 3
-  _score: 0
-  _spawnManager: {fileID: 0}
-  _uiManager: {fileID: 0}
+  _isLaserActive: 0
   _isTripleShotActive: 0
   _isSpeedActive: 0
   _isShieldActive: 0
+  _bombPrefab: {fileID: 0}
+  _explosionPrefab: {fileID: 0}
+  _is2ndaryFireActive: 0
+  _fuse: 2
+  _shields: 0
+  _shieldVisualiser: {fileID: 0}
   _tripleShotPrefab: {fileID: 3345876787413170926, guid: 092523bade3c4eb4baff2fa03e94c3e7, type: 3}
-  _speedPrefab: {fileID: 2345976496522402569, guid: fa11c63d640d07344915582e40a2d2f4, type: 3}
-  _shieldPrefab: {fileID: 0}
+  _speedVisualiser: {fileID: 0}
+  _leftEngine: {fileID: 0}
+  _rightEngine: {fileID: 0}
 --- !u!1001 &3477533932941947302
 PrefabInstance:
   m_ObjectHideFlags: 0

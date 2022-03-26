@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5082984030065235373}
   - component: {fileID: 5795802435010640045}
   - component: {fileID: 8881118298423204061}
-  - component: {fileID: 6049467151778592041}
   m_Layer: 0
   m_Name: Weapon2ndary
   m_TagString: Bomb
@@ -143,10 +142,6 @@ MonoBehaviour:
   _secondarySpeed: 3
   _blastRadius: 5
   _explosionPrefab: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}
-  directions:
-  - 
-  - 
-  - 
 --- !u!58 &8881118298423204061
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -163,21 +158,3 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 5
---- !u!114 &6049467151778592041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5082984030065235360}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70de31bc6d4d9044bb10d0510e22fc0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isArmed: 1
-  _isTimer: 1
-  _isTrigger: 0
-  _fuse: 3
-  _blastRadius: 5
-  _explosionPrefab: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}

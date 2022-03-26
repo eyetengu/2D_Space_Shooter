@@ -78,7 +78,7 @@ public class PowerUp2D : MonoBehaviour
                             break;
 
                         case 5:
-                            _player2d.Weapon2ndary();
+                            _player2d.AcquiredSecondaryFire();
                             break;
 
                         default:
