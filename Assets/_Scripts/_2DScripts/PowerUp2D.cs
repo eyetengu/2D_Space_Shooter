@@ -64,10 +64,10 @@ public class PowerUp2D : MonoBehaviour
                             _player2d.TripleShotActive();
                             break;
                         case 1:
-                            _player2d.SpeedBoostActive();
+                            _player2d.AcquiredSpeedBoost();
                             break;
                         case 2:
-                            _player2d.ShieldsActive();
+                            _player2d.AcquiredShields();
                             break;
 
                         case 3:

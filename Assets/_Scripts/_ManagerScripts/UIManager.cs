@@ -25,6 +25,10 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Slider _fuelCellsSlider;
+    [SerializeField]
+    private Scrollbar _fuelLevelScrollbar;
+    [SerializeField]
+    private Slider _fuelLevelSlider;
 
     void Start()
     {
@@ -38,6 +42,8 @@ public class UIManager : MonoBehaviour
         _restartText = GameObject.Find("Restart_text").GetComponent<Text>();
         _gamePlayMessages = GameObject.Find("GamePlayMessages_text").GetComponent<Text>();
         _ammoText = GameObject.Find("Ammo_text").GetComponent<Text>();
+        _fuelLevelSlider = GameObject.Find("FuelLevel_slider").GetComponent<Slider>();
+
 
         _fuelCellsSlider = GameObject.Find("FuelCell_Slider").GetComponent<Slider>();
         if(_fuelCellsSlider == null)
@@ -60,11 +66,10 @@ public class UIManager : MonoBehaviour
         return;
     }
 
-    public void UpdateFuelCellsUI(float _fuelCells)
-    {
+    //public void UpdateFuelCellsUI(float _fuelCells)
+    //{
         //Debug.Log("UIManager- _fuelCells " + _fuelCells);
-        _fuelCellsSlider.value = _fuelCells;
-    }
+    //}
 
     public void UpdateScoreUI(int _score)
     {
@@ -126,4 +131,20 @@ public class UIManager : MonoBehaviour
         //Debug.Log("Ready for Ammo Count");
     }
 
+    public void FuelManager(int _fuelLevel, int _fuelCells)
+    {
+        if(_fuelCellsSlider == null)
+        {
+            Debug.LogError("UIManager.cs- _fuelcell slider not found");
+        }
+        if(_fuelLevelSlider == null)
+        {
+            Debug.LogError("UIManager.cs- _fuellevel slider not found");
+        }
+
+        _fuelCellsSlider.value = _fuelCells;
+
+        _fuelLevelSlider.value = _fuelLevel;
+
+    }
 }

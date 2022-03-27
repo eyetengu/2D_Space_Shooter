@@ -54,37 +54,41 @@ public class Player2D : MonoBehaviour
     [SerializeField]
     private bool _isSecondaryEquipped = false;
     [SerializeField]
-    private float cdtLaser = 5f;
+    private float cdtLaser = 5f;        //CoolDownTimerLaser(cdtLaser)
 
 
     [SerializeField]
     public float _fuse = 2f;
     private float _blastRadius;
 
-    //private CircleCollider2D _collider2D;
-    //public bool _timedDetonate;
-    //private GameObject _powerUp_2ndaryWeapon_prefab;
-    //END//
+
 
     [SerializeField]
     private int _shields = 0;
     [SerializeField]
     private GameObject _shieldVisualiser;
-
-    [SerializeField]
-    private GameObject _tripleShotPrefab; 
     [SerializeField]
     private GameObject _speedVisualiser;
 
+    [SerializeField]
+    private GameObject _tripleShotPrefab; 
+
+    //DAMAGE VISUALIZER
     [SerializeField]
     private GameObject _leftEngine;
     [SerializeField]
     private GameObject _rightEngine;
 
     [SerializeField]
-    private float _fuelCells = 3;
+    private int _fuelLevel = 0;
+    [SerializeField]
+    private int _fuelCells = 0;
+    [SerializeField]
     private bool _hasFuelCells = false;
-    private bool _speedUpEnemy = false;
+    private float _cdtThrusters = 8f;
+
+
+    //private bool _speedUpEnemy = false;
 
     void Start()
     {
@@ -109,7 +113,7 @@ public class Player2D : MonoBehaviour
             Debug.LogError("Player2D.cs- SoundManager not found");
         }
         
-        _uiManager.UpdateFuelCellsUI(_fuelCells);
+        _uiManager.FuelManager(_fuelLevel, _fuelCells);
 
         transform.position = new Vector3(0, 0, 0);
 
@@ -118,46 +122,39 @@ public class Player2D : MonoBehaviour
 
     void Update()
     {
+        FuelCheck();
         PlayerMovement();
-
-        _uiManager.AmmoCountUpdate(_ammoCount);
-        _uiManager.UpdateShieldsUI(_shields);
-        Debug.Log("Update" + _isLaserActive);
-
-        if (_isLaserActive == true && Input.GetKeyDown(KeyCode.Space) && (Time.time > _canFire))
-            {
-                //Debug.Log("Space pressed");
-                if (_ammoCount > 0)
-                {
-                    _gamePlayMessenger = 0;
-                    FireLaser();
-                }
-                else if(_ammoCount < 1)
-                {
-                    //_gamePlayMessenger = 1;
-                }
-                _uiManager.GamePlayMessages(_gamePlayMessenger);
-            } 
-        
-        if(_isTripleShotActive)
-            {   TripleShotActive(); }
-
-        if (_isSecondaryEquipped == true && Input.GetKey(KeyCode.E))
-            {   SecondaryFire();    }
+        UIUpdate();
+        WeaponsStatus();
     }
 
-    private void SecondaryFire()
+    private void FuelCheck()
     {
-            bomb = Instantiate(_bombPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-            
-            _isSecondaryEquipped = false;     
-        
-            StartCoroutine(CoolDownTimerLaser());
+        if(_fuelCells > 5)
+        {
+            _fuelCells = 5;
+        }
 
-            //_explosionTransform = _bombTransform;
+        if(_fuelCells > 0)
+        {   
+            _hasFuelCells = true;
+        }
+        else if( _fuelCells < 1) 
+        { 
+            _hasFuelCells = false; 
+        }
+        
+        if(_fuelLevel > 100)
+        { _fuelLevel = 100;}    
+        else if (_fuelLevel < 1)
+        {
+            _fuelLevel = 0;
+        }
+
+        _uiManager.FuelManager(_fuelLevel, _fuelCells);
     }
 
-    void PlayerMovement()
+    private void PlayerMovement()
     {
         //Base Movement
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -179,42 +176,34 @@ public class Player2D : MonoBehaviour
         { transform.position = new Vector3(11, transform.position.y, 0); }
 
         //SPEED BOOST
-        if (_fuelCells > 0)
+        if (_hasFuelCells == true)
         {
             GameObject[] enemies;
             enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
+            
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
+
                 if (_isSpeedActive == false)
-                {
-                    _speedUpEnemy = true;
-                    foreach (GameObject enemy in enemies)
-                    {
-                        _enemy2d.FastEnemy(_speedUpEnemy);
-                    }
+                {                    
                     _isSpeedActive = true;
                     _speedVisualiser.SetActive(true);
                     _speedMultiplier = 2;
-                    _fuelCells--;
+                    StartCoroutine(FuelConsumption());
                 }
 
                 else if (_isSpeedActive == true)
                 {
-                    _speedUpEnemy = false;
-                    foreach (GameObject enemy in enemies)
-                    {
-                        _enemy2d.FastEnemy(_speedUpEnemy);
-                    }
+                    
                     _isSpeedActive = false;
                     _speedVisualiser.SetActive(false);
                     _speedMultiplier = 1;
+                    _fuelCells--;
+                    StartCoroutine(SpeedCooldown());
                 }                
             }
-            foreach (GameObject enemy in enemies)
-            {
-                _enemy2d.FastEnemy(_speedUpEnemy);
-            }
+            
         }
         else 
         {
@@ -222,7 +211,40 @@ public class Player2D : MonoBehaviour
             _speedVisualiser.SetActive(false);
             _speedMultiplier = 1;       
         }
-                _uiManager.UpdateFuelCellsUI(_fuelCells);
+
+        _uiManager.FuelManager(_fuelLevel, _fuelCells);
+    }
+
+    private void UIUpdate()
+    {
+        _uiManager.AmmoCountUpdate(_ammoCount);
+        _uiManager.UpdateShieldsUI(_shields);
+        _uiManager.FuelManager(_fuelLevel, _fuelCells);
+    }
+
+    private void WeaponsStatus()
+    {
+        if (_isLaserActive == true && Input.GetKeyDown(KeyCode.Space) && (Time.time > _canFire))
+            {
+                //Debug.Log("Space pressed");
+                if (_ammoCount > 0)
+                {
+                    _gamePlayMessenger = 0;
+                    FireLaser();
+                }
+                else if(_ammoCount < 1)
+                {
+                    //_gamePlayMessenger = 1;
+                }
+                _uiManager.GamePlayMessages(_gamePlayMessenger);
+            } 
+        
+        if(_isTripleShotActive)
+            {   TripleShotActive(); }
+
+        if (_isSecondaryEquipped == true && Input.GetKey(KeyCode.E))
+            {   SecondaryFire();    }
+
     }
 
     private void FireLaser()
@@ -252,8 +274,45 @@ public class Player2D : MonoBehaviour
         _soundManager.LaserSound();
         //Debug.Log("AmmoCount- " + _ammoCount);
     }    
+
+    private void SecondaryFire()
+    {
+            bomb = Instantiate(_bombPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+            
+            _isSecondaryEquipped = false;     
         
-//PowerUp Logic
+            StartCoroutine(CoolDownTimerLaser());
+
+            //_explosionTransform = _bombTransform;
+    }
+
+        
+    IEnumerator FuelConsumption()
+    {
+        while (_fuelLevel > 0)
+        {
+            _fuelLevel -= 1;
+            _uiManager.FuelManager(_fuelLevel, _fuelLevel);
+            yield return new WaitForSeconds(.25f);
+        }
+        if (_fuelLevel < 1) ;
+        {
+            StartCoroutine(SpeedCooldown());
+        }
+    }
+    IEnumerator SpeedCooldown()
+    {
+        _isSpeedActive = false;
+        _speedVisualiser.SetActive(false);
+        _speedMultiplier = 1;
+
+        yield return new WaitForSeconds(_cdtThrusters);
+
+        _isSpeedActive = false;
+    }
+
+
+    //PowerUp Logic
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
@@ -266,23 +325,16 @@ public class Player2D : MonoBehaviour
         _isTripleShotActive = false;
     }
     //
-    public void SpeedBoostActive()
+    public void AcquiredSpeedBoost()
     {
-        _fuelCells += 1;
-        if(_fuelCells > 5)
-        { 
-            _fuelCells = 5;
-        }
-        else
-        {
-            _fuelCells = _fuelCells;
-        }
-        _uiManager.UpdateFuelCellsUI(_fuelCells);
+        _fuelCells ++;
+        _fuelLevel += 20;
+        FuelCheck();
 
-        _hasFuelCells = true;
+        //_hasFuelCells = true;
     }
     //
-    public void ShieldsActive()
+    public void AcquiredShields()
     {                
         _shieldVisualiser.SetActive(true);
 
