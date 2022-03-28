@@ -5,6 +5,8 @@ using UnityEngine;
 public class Enemy2D : MonoBehaviour
 {
     [SerializeField]
+    private Animator _gameCameraAnimator;
+    [SerializeField]
     private float _speed = 4.0f;
     private float _enemySpeedMultiplier = 3f;
     [SerializeField]
@@ -22,6 +24,7 @@ public class Enemy2D : MonoBehaviour
     {
         transform.position = new Vector3(Random.Range(-9, 9), 6, 0);
 
+        _gameCameraAnimator = GameObject.Find("Main Camera").GetComponent<Animator>();
         _player = GameObject.Find("Player_2D").GetComponent<Player2D>();
         if(_player == null)
         {
@@ -69,9 +72,11 @@ public class Enemy2D : MonoBehaviour
             _soundManager.ExplosionSound();
         if(other.tag == "Player")
         {
+            //_gameCameraAnimator.SetTrigger("CameraShake_trigger");
             Player2D player = other.transform.GetComponent<Player2D>();
+            //_gameCameraAnimator.ResetTrigger("CameraShake_trigger");
 
-            if(player != null)
+            if (player != null)
             {
                 player.TakeDamage();
             }

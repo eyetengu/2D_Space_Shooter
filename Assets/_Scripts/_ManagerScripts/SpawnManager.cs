@@ -11,6 +11,8 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField]
     private GameObject[] _powerups;
+    [SerializeField]
+    private GameObject[] _enemies;
     
     [SerializeField]
     private bool _stopSpawning = false;
@@ -46,9 +48,15 @@ public class SpawnManager : MonoBehaviour
         while(_stopSpawning == false)
         {
             yield return new WaitForSeconds(.5f);
+
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 6, 0);
-            GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
+
+            int randomEnemy = Random.Range(0, 3);
+            Instantiate(_enemies[randomEnemy], posToSpawn, Quaternion.identity);
+            foreach(GameObject enemy in _enemies)
+            {
+                transform.parent = _enemyContainer.transform;
+            }
             
             yield return new WaitForSeconds(2.5f);
         }

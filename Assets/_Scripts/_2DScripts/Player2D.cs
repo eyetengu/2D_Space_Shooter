@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player2D : MonoBehaviour
 {
+    private Animator _gameCameraAnimator;
     private UIManager _uiManager;
     public SpawnManager _spawnManager;
     private SoundManager _soundManager;
@@ -95,6 +96,12 @@ public class Player2D : MonoBehaviour
         _isLaserActive = true;
         Debug.Log("Start " + _isLaserActive);
 
+        _gameCameraAnimator = GameObject.Find("Main Camera").GetComponent<Animator>();
+        if(_gameCameraAnimator == null )
+        {
+            Debug.LogError("No Camera Found");
+        }
+
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if(_uiManager == null)
         {
@@ -128,6 +135,11 @@ public class Player2D : MonoBehaviour
         WeaponsStatus();
     }
 
+    IEnumerator ResetTrigger()
+    {
+        yield return new WaitForSeconds(1f);
+        _gameCameraAnimator.SetBool("CameraShake_bool", false);
+    }
     private void FuelCheck()
     {
         if(_fuelCells > 5)
@@ -292,6 +304,34 @@ public class Player2D : MonoBehaviour
         while (_fuelLevel > 0)
         {
             _fuelLevel -= 1;
+            if(_fuelLevel == 100)
+            {
+                _fuelCells = 5;
+            }
+            else if (_fuelLevel >= 80)
+            {
+                _fuelCells = 4;
+            }
+            else if (_fuelLevel >= 60)
+            {
+                _fuelCells = 3;
+            }
+            else if (_fuelLevel >= 40)
+            {
+                _fuelCells = 2;
+                        }
+            else if (_fuelLevel >= 20)
+            {
+                _fuelCells = 1;
+                        }
+            else 
+            {
+                _fuelCells = 0;
+                        }
+
+
+
+
             _uiManager.FuelManager(_fuelLevel, _fuelLevel);
             yield return new WaitForSeconds(.25f);
         }
@@ -432,7 +472,8 @@ public class Player2D : MonoBehaviour
     //Updates to the UI
     public void TakeDamage()
     {
-        if(_isShieldActive == true && _shields > -1)
+
+        if (_isShieldActive == true && _shields > -1)
         { 
             _shields--;
             Debug.Log(_shields); 
@@ -447,6 +488,8 @@ public class Player2D : MonoBehaviour
         {
             _lives --;
         }
+        _gameCameraAnimator.SetBool("CameraShake_bool", true);
+        StartCoroutine(ResetTrigger());
 
         switch (_lives)
         {

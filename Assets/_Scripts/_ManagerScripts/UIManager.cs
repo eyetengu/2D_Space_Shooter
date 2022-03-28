@@ -127,6 +127,7 @@ public class UIManager : MonoBehaviour
     
     public void AmmoCountUpdate(int _ammoCount)
     {
+        string ammo = _ammoCount.ToString();
         _ammoText.text = _ammoCount.ToString();
         //Debug.Log("Ready for Ammo Count");
     }
