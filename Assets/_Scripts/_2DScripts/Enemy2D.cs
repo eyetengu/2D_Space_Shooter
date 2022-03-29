@@ -2,10 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class Enemy2D : MonoBehaviour
 {
     [SerializeField]
     private Animator _gameCameraAnimator;
+    private SoundManager _soundManager;
+
+//Enemy Speed Parameters
     [SerializeField]
     private float _speed = 4.0f;
     private float _enemySpeedMultiplier = 3f;
@@ -14,9 +19,10 @@ public class Enemy2D : MonoBehaviour
 
     [SerializeField]
     private Player2D _player;
+
+//Enemy Components
     private Animator _animator;
     private BoxCollider2D _collider;
-    private SoundManager _soundManager;
 
     private bool speedBool = false;
 

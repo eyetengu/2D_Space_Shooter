@@ -66,18 +66,58 @@ public class UIManager : MonoBehaviour
         return;
     }
 
-    //public void UpdateFuelCellsUI(float _fuelCells)
-    //{
-        //Debug.Log("UIManager- _fuelCells " + _fuelCells);
-    //}
-
     public void UpdateScoreUI(int _score)
     {
         _scoreUI.text = _score.ToString();
     }
 
-// CoRoutines
+    public void AmmoCountUpdate(int _ammoCount, int _maxAmmoCount)
+    {
 
+        string ammo = _ammoCount.ToString();
+        string maxAmmo = _maxAmmoCount.ToString();
+        _ammoText.text = ammo + "/" + maxAmmo;
+        //Debug.Log("Ready for Ammo Count");
+    }
+
+    public void FuelManager(int _fuelLevel, int _fuelCells)
+    {
+        if(_fuelCellsSlider == null)
+        {
+            Debug.LogError("UIManager.cs- _fuelcell slider not found");
+        }
+        if(_fuelLevelSlider == null)
+        {
+            Debug.LogError("UIManager.cs- _fuellevel slider not found");
+        }
+
+        _fuelCellsSlider.value = _fuelCells;
+
+        _fuelLevelSlider.value = _fuelLevel;
+
+    }
+
+    //public void UpdateFuelCellsUI(float _fuelCells)
+    //{
+        //Debug.Log("UIManager- _fuelCells " + _fuelCells);
+    //}
+    
+    public void GamePlayMessages(int _gamePlayMessenger)
+    {
+        switch(_gamePlayMessenger)
+        {
+            case 0:
+                _gamePlayMessages.text = "";
+                break;
+            case 1:
+                _gamePlayMessages.text = "RELOAD";
+                break;
+            default:
+                break;
+        }
+
+    }
+    
     public void GameOverSequence()
     {
         _gameOverText.text = "Game Over!";
@@ -88,6 +128,7 @@ public class UIManager : MonoBehaviour
         _gameManager.GameOver();
     }
 
+// CoRoutines
     IEnumerator GameOverFlickerRoutine()
     {
         _gameOverText.color = Color.red;
@@ -109,43 +150,4 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void GamePlayMessages(int _gamePlayMessenger)
-    {
-        switch(_gamePlayMessenger)
-        {
-            case 0:
-                _gamePlayMessages.text = "";
-                break;
-            case 1:
-                _gamePlayMessages.text = "RELOAD";
-                break;
-            default:
-                break;
-        }
-
-    }
-    
-    public void AmmoCountUpdate(int _ammoCount)
-    {
-        string ammo = _ammoCount.ToString();
-        _ammoText.text = _ammoCount.ToString();
-        //Debug.Log("Ready for Ammo Count");
-    }
-
-    public void FuelManager(int _fuelLevel, int _fuelCells)
-    {
-        if(_fuelCellsSlider == null)
-        {
-            Debug.LogError("UIManager.cs- _fuelcell slider not found");
-        }
-        if(_fuelLevelSlider == null)
-        {
-            Debug.LogError("UIManager.cs- _fuellevel slider not found");
-        }
-
-        _fuelCellsSlider.value = _fuelCells;
-
-        _fuelLevelSlider.value = _fuelLevel;
-
-    }
 }

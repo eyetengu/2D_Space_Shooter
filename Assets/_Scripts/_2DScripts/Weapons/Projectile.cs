@@ -20,7 +20,7 @@ public class Projectile : MonoBehaviour
         //transform.Translate(Vector3.direction * _projectileSpeed * Time.deltaTime);
     }
 
-void Update()
+    void Update()
     {
         MainFunction();
         Debug.Log("Update");

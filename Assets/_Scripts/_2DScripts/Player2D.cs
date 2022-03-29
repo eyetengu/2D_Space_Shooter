@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player2D : MonoBehaviour
 {
+
     private Animator _gameCameraAnimator;
     private UIManager _uiManager;
     public SpawnManager _spawnManager;
@@ -11,28 +12,61 @@ public class Player2D : MonoBehaviour
 
     public int _gamePlayMessenger;
 
+//Enemy
     [SerializeField]
     private Enemy2D _enemy2d;
+    //private bool _speedUpEnemy = false;
 
+//Player Speed
     private float _speed = 5f;
     private float _speedMultiplier = 1f;
     [SerializeField]
     private float _actualSpeed;
     
+//Laser
     [SerializeField]
     private GameObject _laserPrefab;
+    [SerializeField]
+    private bool _isLaserActive = true;
+    [SerializeField]
+    private GameObject _tripleShotPrefab; 
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
     [SerializeField]
     private int _ammoCount = 3;
     private float _hasAmmo;
+//Ammo Center
+    [SerializeField]
+    private int _maxAmmoCount = 15;
 
+//Weapon 2ndary
+    [SerializeField]
+    private GameObject _bombPrefab;
+    [SerializeField]
+    private GameObject _explosionPrefab;
+    private GameObject explosion;
+    private GameObject bomb;
+    private Transform _bombTransform;
+    private Transform _explosionTransform;
+    [SerializeField]
+    private bool _isSecondaryEquipped = false;
+    [SerializeField]
+    private float cdtLaser = 5f;        //CoolDownTimerLaser(cdtLaser)
+    [SerializeField]
+    public float _fuse = 2f;
+    private float _blastRadius;
+
+//Health
     [SerializeField]
     private int _lives = 3;
     private int _score = 0;
 
+//DAMAGE VISUALIZER
     [SerializeField]
-    private bool _isLaserActive = true;
+    private GameObject _leftEngine;
+    [SerializeField]
+    private GameObject _rightEngine;
+
     [SerializeField]
     private bool _isTripleShotActive;
     [SerializeField] 
@@ -40,30 +74,7 @@ public class Player2D : MonoBehaviour
     [SerializeField]
     private bool _isShieldActive;
 
-    //Weapon 2ndary
-    [SerializeField]
-    private GameObject _bombPrefab;
-    [SerializeField]
-    private GameObject _explosionPrefab;
-    private GameObject explosion;
-    private GameObject bomb;
-
-    private Transform _bombTransform;
-    private Transform _explosionTransform;
-
-
-    [SerializeField]
-    private bool _isSecondaryEquipped = false;
-    [SerializeField]
-    private float cdtLaser = 5f;        //CoolDownTimerLaser(cdtLaser)
-
-
-    [SerializeField]
-    public float _fuse = 2f;
-    private float _blastRadius;
-
-
-
+//Shields
     [SerializeField]
     private int _shields = 0;
     [SerializeField]
@@ -71,15 +82,8 @@ public class Player2D : MonoBehaviour
     [SerializeField]
     private GameObject _speedVisualiser;
 
-    [SerializeField]
-    private GameObject _tripleShotPrefab; 
 
-    //DAMAGE VISUALIZER
-    [SerializeField]
-    private GameObject _leftEngine;
-    [SerializeField]
-    private GameObject _rightEngine;
-
+//Fuel Control
     [SerializeField]
     private int _fuelLevel = 0;
     [SerializeField]
@@ -88,8 +92,6 @@ public class Player2D : MonoBehaviour
     private bool _hasFuelCells = false;
     private float _cdtThrusters = 8f;
 
-
-    //private bool _speedUpEnemy = false;
 
     void Start()
     {
@@ -140,6 +142,7 @@ public class Player2D : MonoBehaviour
         yield return new WaitForSeconds(1f);
         _gameCameraAnimator.SetBool("CameraShake_bool", false);
     }
+
     private void FuelCheck()
     {
         if(_fuelCells > 5)
@@ -229,7 +232,7 @@ public class Player2D : MonoBehaviour
 
     private void UIUpdate()
     {
-        _uiManager.AmmoCountUpdate(_ammoCount);
+        _uiManager.AmmoCountUpdate(_ammoCount, _maxAmmoCount);
         _uiManager.UpdateShieldsUI(_shields);
         _uiManager.FuelManager(_fuelLevel, _fuelCells);
     }
@@ -297,7 +300,6 @@ public class Player2D : MonoBehaviour
 
             //_explosionTransform = _bombTransform;
     }
-
         
     IEnumerator FuelConsumption()
     {
@@ -332,7 +334,7 @@ public class Player2D : MonoBehaviour
 
 
 
-            _uiManager.FuelManager(_fuelLevel, _fuelLevel);
+            _uiManager.FuelManager(_fuelLevel, _fuelCells);
             yield return new WaitForSeconds(.25f);
         }
         if (_fuelLevel < 1) ;
@@ -395,8 +397,9 @@ public class Player2D : MonoBehaviour
     //
     public void AmmoIncrease()
     {
-        _ammoCount = 15;
-        if(_ammoCount > 15)
+
+        _ammoCount += 15;
+        if(_ammoCount > _maxAmmoCount)
         {
             _ammoCount = 15;
         }
