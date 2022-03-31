@@ -110,7 +110,7 @@ public class Player2D : MonoBehaviour
             Debug.LogError("Player.cs- No UIManager found");
         }
         
-        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         if(_spawnManager == null)
         {
             Debug.LogError("Player.cs- Unable to Locate SpawnManager");
@@ -264,7 +264,7 @@ public class Player2D : MonoBehaviour
 
     private void FireLaser()
     {
-        Debug.Log("FireLaser() " + _isLaserActive);
+        //Debug.Log("FireLaser() " + _isLaserActive);
 
         if (_ammoCount < 2)
         {

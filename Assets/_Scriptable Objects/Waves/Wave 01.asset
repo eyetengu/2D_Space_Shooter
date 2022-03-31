@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1161b3d6778e58b49ad9291d6e2e7cb9, type: 3}
   m_Name: Wave 01
   m_EditorClassIdentifier: 
+  waveName: Wave 01
+  sequence:
+  - {fileID: 1476417040683428326, guid: 0747e2936a849b641a7bd08b2ccd6117, type: 3}

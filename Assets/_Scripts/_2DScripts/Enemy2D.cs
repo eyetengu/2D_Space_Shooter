@@ -8,7 +8,9 @@ public class Enemy2D : MonoBehaviour
 {
     [SerializeField]
     private Animator _gameCameraAnimator;
+    
     private SoundManager _soundManager;
+    private Transform _enemyContainer;
 
 //Enemy Speed Parameters
     [SerializeField]
@@ -24,11 +26,19 @@ public class Enemy2D : MonoBehaviour
     private Animator _animator;
     private BoxCollider2D _collider;
 
+//Prototype Variables
     private bool speedBool = false;
 
     void Start()
     {
         transform.position = new Vector3(Random.Range(-9, 9), 6, 0);
+
+        _enemyContainer = GameObject.Find("EnemyContainer").GetComponent<Transform>();
+        if (_enemyContainer == null)
+        {
+            Debug.Log("Enemy2D.sc- EnemyContainer not found");
+        }
+        else { this.transform.SetParent(_enemyContainer); }
 
         _gameCameraAnimator = GameObject.Find("Main Camera").GetComponent<Animator>();
         _player = GameObject.Find("Player_2D").GetComponent<Player2D>();
@@ -75,10 +85,12 @@ public class Enemy2D : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-            _soundManager.ExplosionSound();
+        if(_soundManager != null)    
+        _soundManager.ExplosionSound();
+        
         if(other.tag == "Player")
         {
-            //_gameCameraAnimator.SetTrigger("CameraShake_trigger");
+            _gameCameraAnimator.SetTrigger("CameraShake_trigger");
             Player2D player = other.transform.GetComponent<Player2D>();
             //_gameCameraAnimator.ResetTrigger("CameraShake_trigger");
 
@@ -87,22 +99,21 @@ public class Enemy2D : MonoBehaviour
                 player.TakeDamage();
             }
 
-            _animator.SetTrigger("OnEnemyDeath");
-            //_speed = 0;
+            _soundManager.ExplosionSound();
+            _animator.SetTrigger("OnEnemyDeath");            
             Destroy(this.gameObject, 2f);
         }
 
         if(other.tag == "Laser")
         {
             //Debug.Log("Laser Contact");
-            Destroy(_collider);
-            _animator.SetTrigger("OnEnemyDeath");
-            //_speed = 0;
-
-            //_audioSource.Play();
-            Destroy(other.gameObject);
             _player.UpdateScore();
-            Destroy(this, 2f);
+
+            _collider.enabled = false;
+            _animator.SetTrigger("OnEnemyDeath");
+            
+            Destroy(other.gameObject);
+            Destroy(this.gameObject, 2f);
         }  
     }
 

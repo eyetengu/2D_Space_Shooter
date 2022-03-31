@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-    private Animation _explosionAnimation;
-    private AudioSource _explosionAudio;
+    //private Animation _explosionAnimation;
+    //private AudioSource _explosionAudio;
 
     void Start()
     {
+        Destroy(this.gameObject, .1f);
 
     }
 

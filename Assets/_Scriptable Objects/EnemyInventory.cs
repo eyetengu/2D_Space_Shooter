@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class EnemyInventory : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public List<EnemySO> enemyDatabase;
+
+
+    private void Start()
     {
-        
+        enemyDatabase.ForEach(i => i.PrintName());   
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

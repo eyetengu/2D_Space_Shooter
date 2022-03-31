@@ -16,7 +16,7 @@ public class SoundManager : MonoBehaviour
 
     public void ExplosionSound()
     {
-        AudioSource.PlayClipAtPoint(_explosionAudio, transform.position, 1f);
+        AudioSource.PlayClipAtPoint(_explosionAudio, transform.position, .1f);
     }
 
     public void LaserSound()

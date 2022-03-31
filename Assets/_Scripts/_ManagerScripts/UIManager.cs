@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour
         _livesImg.sprite = _liveSprites[_lives];
         if(_lives < 1)
         {
-            GameOverSequence();
+            GameOverSequence(1);
         }
     }
 
@@ -112,19 +112,33 @@ public class UIManager : MonoBehaviour
             case 1:
                 _gamePlayMessages.text = "RELOAD";
                 break;
+            case 2:
+                _gamePlayMessages.text = "Well Done. You Won!";
+                break;
             default:
                 break;
         }
-
     }
     
-    public void GameOverSequence()
+    public void GameOverSequence(int gameOverInt)
     {
-        _gameOverText.text = "Game Over!";
-        _restartText.text = "Press R to Restart";
         _gamePlayMessages.text = "";
+
+        switch(gameOverInt)
+        {
+            case 1:
+                _gameOverText.text = "Game Over!";
+                _restartText.text = "Press R to Restart";
+                StartCoroutine(GameOverFlickerRoutine());
+                break;
+            case 2:
+                _gameOverText.fontSize = 58;
+                _gameOverText.text = "Well Done, You Won!";
+                break;
+            default:
+                break;
+        }
         
-        StartCoroutine(GameOverFlickerRoutine());
         _gameManager.GameOver();
     }
 
@@ -146,8 +160,26 @@ public class UIManager : MonoBehaviour
         _gameOverText.text = "GAME OVER";
         yield return new WaitForSeconds(.5f); //72 36 18
         
-        GameOverSequence();
+        GameOverSequence(1);
+    }
 
+    public void UpdateWaveDisplay(int _currentWave)
+    {
+        _gamePlayMessages.text = " ";
+        _gamePlayMessages.text = "Wave: " + _currentWave;
+        StartCoroutine(PlayMessageTimedErase());
+    }
+
+    public void UpdateEnemyInfo()
+    {
+        _gamePlayMessages.text = " ";
+        //_gamePlayMessages.text = "All Enemies Have Been Eradicated";
+        StartCoroutine(PlayMessageTimedErase());
+    }
+    IEnumerator PlayMessageTimedErase()
+    {
+        yield return new WaitForSeconds(2f);
+        _gamePlayMessages.text = " ";
     }
 
 }

@@ -20,7 +20,7 @@ public class Asteroid : MonoBehaviour
 
     void Start()
     {
-        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         if( _spawnManager == null )
         {
             Debug.LogError("Asteroid.cs- SpawnManage is null");
@@ -61,6 +61,7 @@ public class Asteroid : MonoBehaviour
         
         else if(other.tag == "Laser")
         {
+            _spawnManager.StartSpawning();
             //Debug.Log("Asteroid- collision Laser");
             _soundManager.ExplosionSound();
 
@@ -68,13 +69,12 @@ public class Asteroid : MonoBehaviour
 
             Destroy(other.gameObject);
             
-            _spawnManager.StartSpawning();
-
+            //Debug.Log("Hit by laser");
             Destroy(this.gameObject, .2f);
         }
         else if(other.transform.tag == "Bomb")
         {
-            Debug.Log("Presence sensed at asteroid");
+            //Debug.Log("Presence sensed at asteroid");
         }
     }
 }
