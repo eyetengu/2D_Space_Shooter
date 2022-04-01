@@ -9,14 +9,24 @@ public class SoundManager : MonoBehaviour
     public AudioClip _laserAudio;
     public AudioClip _powerupAudio;
 
+    public bool _debugSound;
+
     public void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("P");
+            if (_debugSound)
+            {
+                Debug.Log("Sound");
+                ExplosionSound();
+            }
+        }
     }
 
     public void ExplosionSound()
     {
-        AudioSource.PlayClipAtPoint(_explosionAudio, transform.position, .1f);
+        AudioSource.PlayClipAtPoint(_explosionAudio, transform.position, 1f);
     }
 
     public void LaserSound()

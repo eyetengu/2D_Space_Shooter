@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3702206883325058692
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3702206883325058693}
+  m_Layer: 0
+  m_Name: EnemyContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3702206883325058693
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3702206883325058692}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3702206883402365891}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3702206883402365889
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3702206883402365891}
+  - component: {fileID: 3702206883402365890}
+  m_Layer: 0
+  m_Name: Spawn_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3702206883402365891
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3702206883402365889}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3702206883325058693}
+  - {fileID: 3702206884225107933}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3702206883402365890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3702206883402365889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e2aa26cb5e2a06469e77d9eec0d2270, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawning: 1
+  _waveCounts: 020000000200000003000000
+  _enemyContainer: {fileID: 3702206883325058692}
+  _powerups:
+  - {fileID: 2678574473549251038, guid: 6948f205a278629469940387d1a9003c, type: 3}
+  - {fileID: 8662783346988042176, guid: aa37a79326192f1498eac9ff86d39349, type: 3}
+  - {fileID: 8662783346988042176, guid: aa37a79326192f1498eac9ff86d39349, type: 3}
+  - {fileID: 410537677627968266, guid: 9266625a7e83f204e8db02d54dbb8de8, type: 3}
+  - {fileID: 7982453778457362653, guid: f9ae80b68477d034f99aec2093915653, type: 3}
+  - {fileID: 5092445557559036518, guid: c678b32c333b26647b40e385b7829784, type: 3}
+  - {fileID: 1924145395694049159, guid: 79e91e7aed56dda4baf3990d610509ed, type: 3}
+  _enemies:
+  - {fileID: 5163314358554173135, guid: 28f691eea0a1a3d4b894d1071f09960f, type: 3}
+  - {fileID: 5163314358554173135, guid: 4ce2182a6a1eb9645b3089a5e8575057, type: 3}
+  - {fileID: 5163314358554173135, guid: 2a75d9469eb523e4bb1cec5047d8413f, type: 3}
+  - {fileID: 5163314358554173135, guid: 2762ae4a4897a984cb2f925a628038ca, type: 3}
+--- !u!1 &3702206884225107932
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3702206884225107933}
+  m_Layer: 0
+  m_Name: PrefabContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3702206884225107933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3702206884225107932}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3702206883402365891}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

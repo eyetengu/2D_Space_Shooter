@@ -4,22 +4,25 @@ using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
-    [SerializeField]
-    private SpawnManager _spawnManager;
     private SoundManager _soundManager;
-   
+    private SpawnManager _spawnManager;
+    
     [SerializeField]
     private float _rotateSpeed = 3.0f;
-
+   
     [SerializeField]
     private GameObject _explosionVisual;
-
     [SerializeField]
     private AudioClip _explosionAudio;
     private AudioSource _audioSource;
 
     void Start()
     {
+        _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
+        if(_soundManager == null)
+        {
+            Debug.LogError("Asteroid.cs- SoundManager Not Found");
+        }
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         if( _spawnManager == null )
         {
@@ -30,12 +33,6 @@ public class Asteroid : MonoBehaviour
         if(_audioSource == null)
         {
             Debug.LogError("Asteroid.cs- AudioSource is null");
-        }
-
-        _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
-        if(_soundManager == null)
-        {
-            Debug.LogError("Asteroid.cs- SoundManager Not Found");
         }
     }
 
@@ -61,20 +58,14 @@ public class Asteroid : MonoBehaviour
         
         else if(other.tag == "Laser")
         {
-            _spawnManager.StartSpawning();
-            //Debug.Log("Asteroid- collision Laser");
             _soundManager.ExplosionSound();
+            _spawnManager.StartSpawning();
 
             Instantiate(_explosionVisual,transform.position,Quaternion.identity);
-
             Destroy(other.gameObject);
             
-            //Debug.Log("Hit by laser");
             Destroy(this.gameObject, .2f);
         }
-        else if(other.transform.tag == "Bomb")
-        {
-            //Debug.Log("Presence sensed at asteroid");
-        }
+
     }
 }

@@ -21,6 +21,8 @@ public class PowerUp2D : MonoBehaviour
     private int _ammoPowerUp = 3;
     //private int _healthPowerUp = 4;
     private int _bombPowerUp = 5;
+    private int _negativePowerUp = 6;
+    
 
     //private AudioClip _clip;
 
@@ -56,34 +58,33 @@ public class PowerUp2D : MonoBehaviour
         {
             _soundManager.PowerUpSound();
 
-            //if(_player2d == null)            
-            //{
-                switch (_powerupID)
-                    {
-                        case 0:
-                            _player2d.TripleShotActive();
-                            break;
-                        case 1:
-                            _player2d.AcquiredSpeedBoost();
-                            break;
-                        case 2:
-                            _player2d.AcquiredShields();
-                            break;
+            switch (_powerupID)
+                {
+                    case 0:
+                        _player2d.TripleShotActive();
+                        break;
+                    case 1:
+                        _player2d.AcquiredSpeedBoost();
+                        break;
+                    case 2:
+                        _player2d.AcquiredShields();
+                        break;
+                    case 3:
+                        _player2d.AmmoIncrease();
+                        break;
+                    case 4:
+                        _player2d.HealthIncrease();
+                        break;
+                    case 5:
+                        _player2d.AcquiredSecondaryFire();
+                        break;
+                    case 6:
+                        _player2d.AcquiredNegativePowerup();
+                        break;
 
-                        case 3:
-                            _player2d.AmmoIncrease();
-                            break;
-                        case 4:
-                            _player2d.HealthIncrease();
-                            break;
-
-                        case 5:
-                            _player2d.AcquiredSecondaryFire();
-                            break;
-
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
+                }
 
             Destroy(this.gameObject);
          }

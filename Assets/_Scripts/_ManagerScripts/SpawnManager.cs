@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
-{
-    //we are going to use the Spawn Manager to control our enemy waves.
-    //we will need an array to house the number of enemies in each wave
-    //we will need an int to keep track of the number of enemies spawned in each wave
-    //we will need an int to represent the current wave
-    
+{   
     private UIManager _uiManager;
     private GameManager _gameManager;
 
@@ -62,17 +57,42 @@ public class SpawnManager : MonoBehaviour
         {            
             StartCoroutine(WaveStart());
 
-            //StartCoroutine(SpawnPowerUpRoutine());
+            StartCoroutine(SpawnPowerUpRoutine());
             //StartCoroutine(SpawnRarePowerUpRoutine());
         }
     }
-
     public void PlayerDeath()
     {   
         _spawning = true;
         //_uiManager.GameOverMessage();
     }
 
+    IEnumerator WaveStart()
+    {        
+        _maxWaves = _waveCounts.Length;
+        Debug.Log("Current Wave: " + (_currentWave + 1) + " Out of " + _maxWaves);
+
+        if(_currentWave < _waveCounts.Length)
+        {            
+            _uiManager.UpdateWaveDisplay(_currentWave + 1);         
+            _currentEnemies = 0;
+            _spawning = false;                       
+
+            yield return new WaitForSeconds(3.0f);
+            
+            StartCoroutine(SpawnEnemyRoutine());            
+        }
+        else
+        {
+            Debug.Log("end the game");
+            _gameManager.GameOver();
+            _uiManager.GameOverSequence(2);
+        }
+
+        _currentEnemyMax = _waveCounts[_currentWave];
+
+        Debug.Log("Current Max Enemies: " + _currentEnemyMax);
+    }
     IEnumerator SpawnEnemyRoutine()
     {
         while (_spawning == false)
@@ -97,11 +117,9 @@ public class SpawnManager : MonoBehaviour
             }
 
             yield return new WaitForSeconds(.1f);
-
         }
-                StartSpawning();
+        StartSpawning();
     }
-
     IEnumerator SpawnPowerUpRoutine()
     {
         while(_spawning == false)
@@ -110,12 +128,10 @@ public class SpawnManager : MonoBehaviour
 
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 6, 0);
 
-            int randomPowerUp = Random.Range(0,5);
-            Instantiate(_powerups[randomPowerUp], posToSpawn, Quaternion.identity);            
-            
+            int randomPowerUp = Random.Range(0,6);
+            Instantiate(_powerups[randomPowerUp], posToSpawn, Quaternion.identity);                        
         }
     }
-
     IEnumerator SpawnRarePowerUpRoutine()
     {
         while (_spawning == true)
@@ -130,30 +146,5 @@ public class SpawnManager : MonoBehaviour
             Instantiate(_powerups[5], posToSpawn, Quaternion.identity);
             Start();
         }
-    }
-
-    IEnumerator WaveStart()
-    {        
-        _maxWaves = _waveCounts.Length;
-        Debug.Log("Current Wave: " + (_currentWave + 1) + " Out of " + _maxWaves);
-
-        if(_currentWave < _waveCounts.Length)
-        {            
-            _uiManager.UpdateWaveDisplay(_currentWave + 1);         
-            _currentEnemies = 0;
-            _spawning = false;                       
-            yield return new WaitForSeconds(3.0f);
-            Debug.Log("Entering SpawnEnemyRoutine");
-            
-            StartCoroutine(SpawnEnemyRoutine());            
-        }
-        else
-        {
-            Debug.Log("end the game");
-            _gameManager.GameOver();
-            _uiManager.GameOverSequence(2);
-        }
-        _currentEnemyMax = _waveCounts[_currentWave];
-        Debug.Log("Current Max Enemies: " + _currentEnemyMax);
     }
 }

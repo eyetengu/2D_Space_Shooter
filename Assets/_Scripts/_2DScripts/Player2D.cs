@@ -137,11 +137,6 @@ public class Player2D : MonoBehaviour
         WeaponsStatus();
     }
 
-    IEnumerator ResetTrigger()
-    {
-        yield return new WaitForSeconds(1f);
-        _gameCameraAnimator.SetBool("CameraShake_bool", false);
-    }
 
     private void FuelCheck()
     {
@@ -166,6 +161,17 @@ public class Player2D : MonoBehaviour
             _fuelLevel = 0;
         }
 
+        _uiManager.FuelManager(_fuelLevel, _fuelCells);
+    }
+    public void UpdateScore()
+    {
+        _score += 10;
+        _uiManager.UpdateScoreUI(_score);
+    }
+    private void UIUpdate()
+    {
+        _uiManager.AmmoCountUpdate(_ammoCount, _maxAmmoCount);
+        _uiManager.UpdateShieldsUI(_shields);
         _uiManager.FuelManager(_fuelLevel, _fuelCells);
     }
 
@@ -229,14 +235,6 @@ public class Player2D : MonoBehaviour
 
         _uiManager.FuelManager(_fuelLevel, _fuelCells);
     }
-
-    private void UIUpdate()
-    {
-        _uiManager.AmmoCountUpdate(_ammoCount, _maxAmmoCount);
-        _uiManager.UpdateShieldsUI(_shields);
-        _uiManager.FuelManager(_fuelLevel, _fuelCells);
-    }
-
     private void WeaponsStatus()
     {
         if (_isLaserActive == true && Input.GetKeyDown(KeyCode.Space) && (Time.time > _canFire))
@@ -261,7 +259,6 @@ public class Player2D : MonoBehaviour
             {   SecondaryFire();    }
 
     }
-
     private void FireLaser()
     {
         //Debug.Log("FireLaser() " + _isLaserActive);
@@ -289,7 +286,6 @@ public class Player2D : MonoBehaviour
         _soundManager.LaserSound();
         //Debug.Log("AmmoCount- " + _ammoCount);
     }    
-
     private void SecondaryFire()
     {
             bomb = Instantiate(_bombPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
@@ -352,7 +348,11 @@ public class Player2D : MonoBehaviour
 
         _isSpeedActive = false;
     }
-
+    IEnumerator ResetTrigger()
+    {
+        yield return new WaitForSeconds(1f);
+        _gameCameraAnimator.SetBool("CameraShake_bool", false);
+    }
 
     //PowerUp Logic
     public void TripleShotActive()
@@ -360,41 +360,10 @@ public class Player2D : MonoBehaviour
         _isTripleShotActive = true;
         StartCoroutine(TripleShotPowerDownRoutine());
     }
-    IEnumerator TripleShotPowerDownRoutine()
+    public void AcquiredSecondaryFire()
     {
-        //_tripleShotPrefab;
-        yield return new WaitForSeconds(5.0f);
-        _isTripleShotActive = false;
+        _isSecondaryEquipped = true;
     }
-    //
-    public void AcquiredSpeedBoost()
-    {
-        _fuelCells ++;
-        _fuelLevel += 20;
-        FuelCheck();
-
-        //_hasFuelCells = true;
-    }
-    //
-    public void AcquiredShields()
-    {                
-        _shieldVisualiser.SetActive(true);
-
-        StartCoroutine(ShieldPowerDownRoutine());
-    }
-    IEnumerator ShieldPowerDownRoutine()
-    {
-        _shields += 3;
-        if(_shields > 3)
-        {
-            _shields = 3;
-        }
-        //_uiManager.UpdateShieldsUI(_shields);      
-        _isShieldActive = true;
-
-        yield return new WaitForSeconds(1.0f);
-    }
-    //
     public void AmmoIncrease()
     {
 
@@ -407,7 +376,21 @@ public class Player2D : MonoBehaviour
         _gamePlayMessenger = 0;
 
     }
-    //
+
+    public void AcquiredSpeedBoost()
+    {
+        _fuelCells ++;
+        _fuelLevel += 20;
+        FuelCheck();
+
+        //_hasFuelCells = true;
+    }
+    public void AcquiredShields()
+    {                
+        _shieldVisualiser.SetActive(true);
+
+        StartCoroutine(ShieldPowerDownRoutine());
+    }
     public void HealthIncrease()
     {
         _lives++;
@@ -433,10 +416,10 @@ public class Player2D : MonoBehaviour
                 break;
         }
     }
-    //
-    public void AcquiredSecondaryFire()
+    
+    public void AcquiredNegativePowerup()
     {
-        _isSecondaryEquipped = true;
+        TakeDamage();
     }
 
     IEnumerator CoolDownTimerLaser()
@@ -454,6 +437,27 @@ public class Player2D : MonoBehaviour
         Debug.Log("_isLaserReactivated");
         _isLaserActive = true;
     }
+    IEnumerator TripleShotPowerDownRoutine()
+    {
+        //_tripleShotPrefab;
+        yield return new WaitForSeconds(5.0f);
+        _isTripleShotActive = false;
+    }
+
+    IEnumerator ShieldPowerDownRoutine()
+    {
+        _shields += 3;
+        if(_shields > 3)
+        {
+            _shields = 3;
+        }
+        //_uiManager.UpdateShieldsUI(_shields);      
+        _isShieldActive = true;
+
+        yield return new WaitForSeconds(1.0f);
+    }
+
+//Damage Control
     void CollateralDamage()
     {
         GameObject[] enemies;
@@ -471,11 +475,8 @@ public class Player2D : MonoBehaviour
         _isLaserActive = true;
         Debug.Log("CoroutineEnd" + _isLaserActive);
     }
-
-    //Updates to the UI
     public void TakeDamage()
     {
-
         if (_isShieldActive == true && _shields > -1)
         { 
             _shields--;
@@ -521,13 +522,7 @@ public class Player2D : MonoBehaviour
         }
     }
 
-    public void UpdateScore()
-    {
-        _score += 10;
-        _uiManager.UpdateScoreUI(_score);
-    }
-
-
+//Debug
     private void OnDrawGizmos() 
     {
         Gizmos.color = Color.blue;

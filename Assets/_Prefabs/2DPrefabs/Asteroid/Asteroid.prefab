@@ -134,6 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d9d569c653a6742af0f2962d284ce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rotateSpeed: 3
-  _explosion: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}
   _spawnManager: {fileID: 0}
+  _rotateSpeed: 3
+  _explosionVisual: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}
+  _explosionAudio: {fileID: 0}
