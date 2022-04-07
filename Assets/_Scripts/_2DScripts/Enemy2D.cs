@@ -27,7 +27,7 @@ public class Enemy2D : MonoBehaviour
     private BoxCollider2D _collider;
 
 //Prototype Variables
-    private bool speedBool = false;
+    //private bool speedBool = false;
 
     void Start()
     {
@@ -41,6 +41,10 @@ public class Enemy2D : MonoBehaviour
         else { this.transform.SetParent(_enemyContainer); }
 
         _gameCameraAnimator = GameObject.Find("Main Camera").GetComponent<Animator>();
+        if(_gameCameraAnimator == null)
+        {
+            Debug.LogError("Enemy2D- Camera not found");
+        }
         _player = GameObject.Find("Player_2D").GetComponent<Player2D>();
         if(_player == null)
         {
@@ -88,10 +92,10 @@ public class Enemy2D : MonoBehaviour
         if(_soundManager != null)    
         _soundManager.ExplosionSound();
         
+        Player2D player = other.transform.GetComponent<Player2D>();
         if(other.tag == "Player")
         {
             _gameCameraAnimator.SetTrigger("CameraShake_trigger");
-            Player2D player = other.transform.GetComponent<Player2D>();
             //_gameCameraAnimator.ResetTrigger("CameraShake_trigger");
 
             if (player != null)

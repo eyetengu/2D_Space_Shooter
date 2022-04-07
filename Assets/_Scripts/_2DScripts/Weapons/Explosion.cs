@@ -13,13 +13,16 @@ public class Explosion : MonoBehaviour
     void Start()
     {
         _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
+        if(_soundManager == null )
+        { Debug.Log("Explosion- Sound Manager is null"); }
+
         _soundManager.ExplosionSound();
+
         StartCoroutine(TimeDelay());
     }
 
     public void ExplosiveAction()
-    {
-            
+    {            
         Destroy(this.gameObject, .1f);
     }
 
@@ -27,7 +30,5 @@ public class Explosion : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         Destroy(this.gameObject);
-
     }
-
 }

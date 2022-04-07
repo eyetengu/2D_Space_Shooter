@@ -5,26 +5,14 @@ using UnityEngine;
 
 public class PowerUp2D : MonoBehaviour
 {
-    //[SerializeField]
     private SoundManager _soundManager;
     private Player2D _player2d;
 
     [SerializeField]
     private float _speed = 3f;
 
-    [SerializeField]            //0 = tripleshot 1 = speed 2 = shield
+    [SerializeField]            //0 = 3xShot, 1 = speed, 2 = shield, 3 = ammo, 4 = health, 5 = secondaryFire, 6 = negativePowerup
     private int _powerupID;
-    private int _tripleShotPowerUp = 0;
-    private int _speedPowerUp = 1;
-    private int _ShieldsPowerUp = 2;
-
-    private int _ammoPowerUp = 3;
-    //private int _healthPowerUp = 4;
-    private int _bombPowerUp = 5;
-    private int _negativePowerUp = 6;
-    
-
-    //private AudioClip _clip;
 
     void Start()
     {   
@@ -33,7 +21,6 @@ public class PowerUp2D : MonoBehaviour
         {
             Debug.LogError("PowerUp2D.cs- Player2D is missing in action");
         }
-
         _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
         if(_soundManager == null)
         {
@@ -46,6 +33,7 @@ public class PowerUp2D : MonoBehaviour
     void Update()
     {
          transform.Translate(Vector3.down * _speed * Time.deltaTime);
+
          if(transform.position.y < -7f)
          {
             Destroy(this.gameObject);
@@ -54,7 +42,7 @@ public class PowerUp2D : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-         if(other.tag == "Player")
+        if(other.tag == "Player")
         {
             _soundManager.PowerUpSound();
 
@@ -87,6 +75,6 @@ public class PowerUp2D : MonoBehaviour
                 }
 
             Destroy(this.gameObject);
-         }
+        }
     }
 }

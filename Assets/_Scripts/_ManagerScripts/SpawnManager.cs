@@ -11,6 +11,28 @@ public class SpawnManager : MonoBehaviour
     private bool _spawning = true;
 
     [SerializeField]
+    private bool _spawnPowerUp = true;
+    [SerializeField]
+    private bool _spawnRarePowerUp = true;
+    [SerializeField]
+    private bool _spawnEpicPowerUp = true;
+    [SerializeField]
+    private bool _spawnNegativePowerUp = true;
+
+    [SerializeField]
+    private float _basicDelay = 5f;
+    [SerializeField]
+    private float _rareDelay = 10f;
+    [SerializeField]
+    private float _epicDelay = 15f;
+    [SerializeField]
+    private float _negativeDelay = 6f;
+
+
+    [SerializeField]
+    private GameObject _enemyContainer;
+
+    [SerializeField]
     private int[] _waveCounts;          // number Of enemies per Wave;
     private int _currentEnemies;        //number of enemies spawned in current Wave;
     private int _currentWave;           //tells the current wave [index]
@@ -18,37 +40,50 @@ public class SpawnManager : MonoBehaviour
     private int _currentEnemyMax;
 
     [SerializeField]
-    private GameObject _enemyContainer;
+    private GameObject[] _enemies;
 
     [SerializeField]
-    private GameObject[] _powerups;
+    private GameObject[] _basicPowerups;
     [SerializeField]
-    private GameObject[] _enemies;    
+    private GameObject[] _rarePowerups;
+    [SerializeField]
+    private GameObject[] _epicPowerups;
+    [SerializeField]
+    private GameObject[] _negativePowerups;
 
-    private float _rarePUTimer;
+
+    //private float _rarePUTimer;
 
     void Start()
     {
-        _spawning = true;
-
         _enemyContainer = GameObject.Find("EnemyContainer");
-
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if(_uiManager == null)
         {
             Debug.LogError("UIManager Not Located(SpawnManager)");
         }
-
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if(_gameManager == null)
         {
             Debug.LogError("SpawnManager.cs- Unable to Locate Game Manager");
+        }        
 
-        }
-
-        Debug.Log("SpawnManager Ready");
         _maxWaves = _waveCounts.Length;
         _currentEnemyMax = _waveCounts[_currentWave];
+    }
+
+    public void Update()
+    {
+            if (_spawnPowerUp == true)
+            {
+                StartCoroutine(SpawnPowerUpRoutine());
+            }
+            
+            if(_spawnNegativePowerUp == true)
+            {
+                StartCoroutine(SpawnNegativePowerUpRoutine());
+            }
+        
     }
 
     public void StartSpawning()
@@ -57,13 +92,14 @@ public class SpawnManager : MonoBehaviour
         {            
             StartCoroutine(WaveStart());
 
-            StartCoroutine(SpawnPowerUpRoutine());
+            //StartCoroutine(SpawnBasicPowerUpRoutine());
+
             //StartCoroutine(SpawnRarePowerUpRoutine());
         }
     }
     public void PlayerDeath()
     {   
-        _spawning = true;
+        _spawning = false;
         //_uiManager.GameOverMessage();
     }
 
@@ -82,7 +118,7 @@ public class SpawnManager : MonoBehaviour
             
             StartCoroutine(SpawnEnemyRoutine());            
         }
-        else
+        else if(_currentWave > _waveCounts.Length)
         {
             Debug.Log("end the game");
             _gameManager.GameOver();
@@ -90,6 +126,8 @@ public class SpawnManager : MonoBehaviour
         }
 
         _currentEnemyMax = _waveCounts[_currentWave];
+        if(_currentEnemyMax < 1)
+        { _currentEnemyMax = 0; }
 
         Debug.Log("Current Max Enemies: " + _currentEnemyMax);
     }
@@ -120,31 +158,53 @@ public class SpawnManager : MonoBehaviour
         }
         StartSpawning();
     }
+
     IEnumerator SpawnPowerUpRoutine()
     {
-        while(_spawning == false)
+        _spawnPowerUp = false;
+        int randomSpawn = Random.Range(1, 101);
+        Vector3 posToSpawn = new Vector3(Random.Range(-8, 8), 8, 0);
+
+        if(randomSpawn < 50)
         {
-            yield return new WaitForSeconds(Random.Range(5, 8f));
-
-            Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 6, 0);
-
-            int randomPowerUp = Random.Range(0,6);
-            Instantiate(_powerups[randomPowerUp], posToSpawn, Quaternion.identity);                        
+            int randomBasic = Random.Range(0, _basicPowerups.Length);
+            Instantiate(_basicPowerups[randomBasic], posToSpawn, Quaternion.identity);
         }
+        else if(randomSpawn < 90)
+        {
+            int randomRare = Random.Range(0, _rarePowerups.Length);
+            Instantiate(_rarePowerups[randomRare], posToSpawn, Quaternion.identity);
+        }
+        else if(randomSpawn < 100)
+        {
+            int randomEpic = Random.Range(0, _epicPowerups.Length);
+
+            Instantiate(_epicPowerups[0], posToSpawn, Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(_basicPowerups[2]);
+        }
+
+        yield return new WaitForSeconds(5f);
+                    
+        _spawnPowerUp = true;
     }
-    IEnumerator SpawnRarePowerUpRoutine()
+   
+    IEnumerator SpawnNegativePowerUpRoutine()
     {
-        while (_spawning == true)
-        {
+        _spawnNegativePowerUp = false;
 
-            Debug.Log("SpawnRarePowerUpRoutine");
-            _rarePUTimer = Random.Range(20f, 30f);
-            yield return new WaitForSeconds(_rarePUTimer);
+        Vector3 posToSpawnNegative = new Vector3(Random.Range(-8, 8f), 7, 0);
 
-            Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 6, 0);
+        yield return new WaitForSeconds(5f);
 
-            Instantiate(_powerups[5], posToSpawn, Quaternion.identity);
-            Start();
-        }
+        Instantiate(_negativePowerups[0], posToSpawnNegative, Quaternion.identity);
+        yield return new WaitForSeconds(1f);
+
+        _spawnNegativePowerUp= true;
+
+
     }
+
 }

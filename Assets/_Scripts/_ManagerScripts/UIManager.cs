@@ -14,33 +14,45 @@ public class UIManager : MonoBehaviour
     public Text _restartText;
     public Text _gamePlayMessages;
     public Text _ammoText;
-    //FontSizes
+//FontSizes
     public int fontSize = 24;
-    //Sprites
+
+//Sprites
     [SerializeField]
     private Sprite[] _liveSprites;
+    [SerializeField]
+    private Sprite[] _secondaryFireSprites;
+
     private Image _livesImg;
+    private Image _secondaryFireImg;
 
 //Shields
     [SerializeField]
     private Sprite[] _shieldSprites;
+    [SerializeField]
     private Image _shieldsImg;
 
 //Fuel System
     [SerializeField]
-    private Slider _fuelCellsSlider;
-    [SerializeField]
-    private Scrollbar _fuelLevelScrollbar;
-    [SerializeField]
     private Slider _fuelLevelSlider;
-
 
     void Start()
     {
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+        if(_gameManager == null)
+        { 
+            Debug.LogError("UIManager.cs- Game Manager is null"); 
+        }
 
         _livesImg = GameObject.Find("Health_img").GetComponent<Image>();
+
+        //_secondaryFireImg = GameObject.Find("SecondaryFire_img").GetComponent<Image>();
+        
         _shieldsImg = GameObject.Find("Shields_img").GetComponent<Image>();
+        if(_shieldsImg == null)
+        {
+            Debug.LogError("UIManager- Shields Unavailable");
+        }
 
         _scoreUI = GameObject.Find("Score_text").GetComponent<Text>();
         _gameOverText = GameObject.Find("GameOver_text").GetComponent<Text>();
@@ -48,9 +60,12 @@ public class UIManager : MonoBehaviour
         _gamePlayMessages = GameObject.Find("GamePlayMessages_text").GetComponent<Text>();
         _ammoText = GameObject.Find("Ammo_text").GetComponent<Text>();
         _fuelLevelSlider = GameObject.Find("FuelLevel_slider").GetComponent<Slider>();
-        _fuelCellsSlider = GameObject.Find("FuelCell_Slider").GetComponent<Slider>();
-        if(_fuelCellsSlider == null)
-        { Debug.LogError("UIManager.cs- Slider not found"); }
+        if(_fuelLevelSlider == null)
+        { Debug.Log("UIManager- Fuel Level Indicator Missing");}
+
+
+        //_fuelCellsSlider = GameObject.Find("FuelCell_Slider").GetComponent<Slider>();
+        //if(_fuelCellsSlider == null)        { Debug.LogError("UIManager.cs- Slider not found"); }
     }
 //Systems Check
     public void UpdateHealthUI(int _lives)
@@ -67,6 +82,7 @@ public class UIManager : MonoBehaviour
         _shieldsImg.sprite = _shieldSprites[_shields];
         return;
     }
+
     public void UpdateScoreUI(int _score)
     {
         _scoreUI.text = _score.ToString();
@@ -79,24 +95,11 @@ public class UIManager : MonoBehaviour
         _ammoText.text = ammo + "/" + maxAmmo;
         //Debug.Log("Ready for Ammo Count");
     }
-    public void FuelManager(int _fuelLevel, int _fuelCells)
+
+    public void FuelManager(float _fuelLevel) //_fuelCells
     {
-        if(_fuelCellsSlider == null)
-        {
-            Debug.LogError("UIManager.cs- _fuelcell slider not found");
-        }
-        if(_fuelLevelSlider == null)
-        {
-            Debug.LogError("UIManager.cs- _fuellevel slider not found");
-        }
-
-        _fuelCellsSlider.value = _fuelCells;
-
-        _fuelLevelSlider.value = _fuelLevel;
-
+        Debug.Log("UIManager- " + _fuelLevel);
     }
-    //public void UpdateFuelCellsUI(float _fuelCells)
-    //{        //Debug.Log("UIManager- _fuelCells " + _fuelCells);    //}
     
 //Message Center
     public void GamePlayMessages(int _gamePlayMessenger)
@@ -119,6 +122,7 @@ public class UIManager : MonoBehaviour
     public void GameOverSequence(int gameOverInt)
     {
         _gamePlayMessages.text = "";
+        _restartText.text = "";
 
         switch(gameOverInt)
         {
@@ -129,7 +133,8 @@ public class UIManager : MonoBehaviour
                 break;
             case 2:
                 _gameOverText.fontSize = 58;
-                _gameOverText.text = "Well Done, You Won!";
+                _gameOverText.text = "You Won!";
+                _restartText.text = "Press R to Restart";
                 break;
             default:
                 break;
@@ -140,6 +145,7 @@ public class UIManager : MonoBehaviour
     public void UpdateWaveDisplay(int _currentWave)
     {
         _gamePlayMessages.text = " ";
+        _gamePlayMessages.color = Color.magenta;
         _gamePlayMessages.text = "Wave: " + _currentWave;
         StartCoroutine(PlayMessageTimedErase());
     }
@@ -148,6 +154,13 @@ public class UIManager : MonoBehaviour
         _gamePlayMessages.text = " ";
         //_gamePlayMessages.text = "All Enemies Have Been Eradicated";
         StartCoroutine(PlayMessageTimedErase());
+    }
+
+    public void UpdateSecondaryFire(int _secondaryWeaponID)
+    {
+        //_secondaryFireID = _secondaryWeaponID;
+        //Debug.Log("UIManager Image" + _secondaryWeaponID);
+        //_secondaryFireImg.sprite = _secondaryFireSprites[_secondaryWeaponID];
     }
 
 // CoRoutines
@@ -170,8 +183,6 @@ public class UIManager : MonoBehaviour
         
         GameOverSequence(1);
     }
-
-
     IEnumerator PlayMessageTimedErase()
     {
         yield return new WaitForSeconds(2f);

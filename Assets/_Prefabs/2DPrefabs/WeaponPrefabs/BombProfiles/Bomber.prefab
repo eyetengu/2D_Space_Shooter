@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6636041533000924442}
   - component: {fileID: 6636041533000924440}
-  - component: {fileID: 8539217903608175903}
+  - component: {fileID: 2300406303832035995}
+  - component: {fileID: 1830861375}
   m_Layer: 0
   m_Name: Bomber
   m_TagString: Untagged
@@ -80,10 +81,10 @@ SpriteRenderer:
   m_Size: {x: 0.96, y: 0.95}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8539217903608175903
+--- !u!114 &2300406303832035995
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,13 +93,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 6636041533000924447}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70de31bc6d4d9044bb10d0510e22fc0f, type: 3}
+  m_Script: {fileID: 11500000, guid: 792565acd9307f34eb226800beaf3ce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isArmed: 0
+  _isTimer: 1
+  _isTrigger: 0
+  _fuse: 2
+  _blastRadius: 0
+  _explosionPrefab: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}
+--- !u!114 &1830861375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6636041533000924447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 792565acd9307f34eb226800beaf3ce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _isArmed: 1
-  _isTimer: 0
-  _isTriggered: 0
-  _isTimerTriggered: 0
-  _timedDetonate: 0
+  _isTimer: 1
+  _isTrigger: 0
   _fuse: 2
+  _blastRadius: 0
   _explosionPrefab: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}

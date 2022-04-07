@@ -36,6 +36,7 @@ public class NegativePowerUp2D : MonoBehaviour
         {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             _soundManager.ExplosionSound();
+            Destroy(other.gameObject);
             Destroy(this.gameObject);
 
         }

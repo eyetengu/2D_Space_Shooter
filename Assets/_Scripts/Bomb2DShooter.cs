@@ -31,6 +31,8 @@ public class Bomb2DShooter : MonoBehaviour
         { Debug.Log("Bomb2dShooter.cs- SoundManager Unavailable"); }
         
         _playerTransform = _player.transform;
+        if( _playerTransform == null )
+        { Debug.LogError("Bomb2DShooter- no Player Transform found"); }
 
         Debug.Log("Bomb Deployed");
 
@@ -48,11 +50,14 @@ public class Bomb2DShooter : MonoBehaviour
     IEnumerator TickTickBoom()
     {
         yield return new WaitForSeconds(_timer);
+
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+
         CheckForCasualties();
+
         _soundManager.ExplosionSound();
-        Debug.Log("Destroyed");
         Destroy(this.gameObject, .1f);
+        Debug.Log("Destroyed");
 
 
     }
