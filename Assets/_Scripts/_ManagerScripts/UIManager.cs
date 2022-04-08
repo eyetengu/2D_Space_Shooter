@@ -53,11 +53,12 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("UIManager- Shields Unavailable");
         }
-
         _scoreUI = GameObject.Find("Score_text").GetComponent<Text>();
+
         _gameOverText = GameObject.Find("GameOver_text").GetComponent<Text>();
         _restartText = GameObject.Find("Restart_text").GetComponent<Text>();
         _gamePlayMessages = GameObject.Find("GamePlayMessages_text").GetComponent<Text>();
+        
         _ammoText = GameObject.Find("Ammo_text").GetComponent<Text>();
         _fuelLevelSlider = GameObject.Find("FuelLevel_slider").GetComponent<Slider>();
         if(_fuelLevelSlider == null)
@@ -103,8 +104,9 @@ public class UIManager : MonoBehaviour
         //Debug.Log("Ready for Ammo Count");
     }
 
-    public void FuelManager(float _fuelLevel) //_fuelCells
+    public void FuelManager(float _fuelLevel) 
     {
+        _fuelLevelSlider.value = _fuelLevel;
         Debug.Log("UIManager- " + _fuelLevel);
     }
     

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player2D : MonoBehaviour
 {
-
     private Animator _gameCameraAnimator;
     private UIManager _uiManager;
     private SpawnManager _spawnManager;
@@ -29,6 +28,7 @@ public class Player2D : MonoBehaviour
     private bool _isLaserActive = true;
     [SerializeField]
     private bool _isTripleShotActive;
+
 //Ammo Center
     [SerializeField]
     private int _ammoCount = 3;
@@ -41,8 +41,7 @@ public class Player2D : MonoBehaviour
     private GameObject _tripleShotPrefab; 
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
-    //[SerializeField]
-    //private float cdtLaser = 5f;        //CoolDownTimerLaser(cdtLaser)
+
 //Weapon 2ndary
     [SerializeField]
     private bool _isSecondaryEquipped = false;
@@ -61,15 +60,15 @@ public class Player2D : MonoBehaviour
     private int _score = 0;
 
     //SpeedCenter
-    float fuelLevelCurrent;
-        [SerializeField] 
+    [SerializeField] 
     private bool _isSpeedActive;
     [SerializeField]
-    private bool _hasFuel = false;
-    [SerializeField]
-    private float _fuelLevel = 0f;
+    private bool _shipHasFuel = false;
     private bool _isConsuming;
-    //private float _cdtThrusters = 8f;
+    [SerializeField]
+    float fuelLevelCurrent;
+    private float _fuelLevel = 0f;
+    private GameObject _fuelLevelThruster;
 
 //Shields
     [SerializeField]
@@ -87,7 +86,11 @@ public class Player2D : MonoBehaviour
     [SerializeField]
     private GameObject _speedVisualiser;
 
-//Fuel Control
+
+
+
+
+
 
     void Start()
     {
@@ -112,6 +115,7 @@ public class Player2D : MonoBehaviour
         {
             Debug.LogError("Player.cs- No UIManager found");
         }
+        _fuelLevelThruster = GameObject.Find("Thruster_image");
         
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         if(_spawnManager == null)
@@ -132,27 +136,27 @@ public class Player2D : MonoBehaviour
 
     void Update()
     {
-        FuelCheck(fuelLevelCurrent);
+        FuelCheck();
         PlayerMovement();
         UIUpdate();
         WeaponsStatus();
     }
 
-    private void FuelCheck(float fuelLevelCurrent)
+    private void FuelCheck()
     {
         if(_fuelLevel > 100)
         { 
             _fuelLevel = 100;
-            _hasFuel = true;
+            _shipHasFuel = true;
         }
         else if(_fuelLevel > 0)
         {
-            _hasFuel = true;
+            _shipHasFuel = true;
         }
         else if (_fuelLevel < 1)
         {
             _fuelLevel = 0;
-            _hasFuel = false;
+            _shipHasFuel = false;
         }
         Debug.Log("Fuel- " + _fuelLevel + "%");
         _uiManager.FuelManager(_fuelLevel);
@@ -166,6 +170,7 @@ public class Player2D : MonoBehaviour
     {
         _uiManager.AmmoCountUpdate(_ammoCount, _maxAmmoCount);
         _uiManager.UpdateShieldsUI(_shields);
+        //_uiManager.FuelManager(_fuelLevel);
     }
 
     private void PlayerMovement()
@@ -207,8 +212,9 @@ public class Player2D : MonoBehaviour
         { transform.position = new Vector3(11, transform.position.y, 0); }
 
         //SPEED BOOST
-        if (_hasFuel)
-        {          
+        if (_shipHasFuel)
+        {
+
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 if (_isSpeedActive == false)
@@ -219,6 +225,7 @@ public class Player2D : MonoBehaviour
                     _speedVisualiser.SetActive(true);
                     _speedMultiplier = 2;
                     _isConsuming = true;
+                    _fuelLevelThruster.SetActive(true);
 
                     StartCoroutine(FuelConsumption());
                 }
@@ -230,7 +237,9 @@ public class Player2D : MonoBehaviour
                     _speedVisualiser.SetActive(false);
                     _speedMultiplier = 1;
                     _isConsuming = false;
-                }                
+                    _fuelLevelThruster.SetActive(false);
+
+                }
             }            
         }
         else 
@@ -239,6 +248,8 @@ public class Player2D : MonoBehaviour
             _speedVisualiser.SetActive(false);
             _speedMultiplier = 1;
             _isConsuming = false;
+            _fuelLevelThruster.SetActive(false);
+
         }
     }
     private void WeaponsStatus()
@@ -314,8 +325,11 @@ public class Player2D : MonoBehaviour
         {
             _fuelLevel -= 1;
             yield return new WaitForSeconds(.25f);
+            _fuelLevelThruster.SetActive(true);
         }
-    }    
+        _fuelLevelThruster.SetActive(false);
+
+    }
     IEnumerator ResetTrigger()
     {
         yield return new WaitForSeconds(1f);
@@ -346,13 +360,11 @@ public class Player2D : MonoBehaviour
     public void AcquiredSpeedBoost()
     {
         _fuelLevel += 20;
-        fuelLevelCurrent = _fuelLevel;
-        FuelCheck(fuelLevelCurrent);
+        FuelCheck();
     }
     public void AcquiredShields()
     {                
         _shieldVisualiser.SetActive(true);
-
         StartCoroutine(ShieldPowerDownRoutine());
     }
     public void HealthIncrease()

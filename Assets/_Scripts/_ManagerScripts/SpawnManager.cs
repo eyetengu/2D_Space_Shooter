@@ -91,12 +91,6 @@ public class SpawnManager : MonoBehaviour
             StartCoroutine(WaveStart());
         }
     }
-    public void PlayerDeath()
-    {
-        _okToSpawnPowerups = false;
-        _spawnPowerUp = false;
-        _spawnNegativePowerUp = false;
-    }
 
     IEnumerator WaveStart()
     {        
@@ -118,6 +112,7 @@ public class SpawnManager : MonoBehaviour
             Debug.Log("end the game");
             _gameManager.GameOver();
             _uiManager.GameOverSequence(2);
+            PlayerDeath();
         }
 
         _currentEnemyMax = _waveCounts[_currentWave];
@@ -204,7 +199,13 @@ public class SpawnManager : MonoBehaviour
 
     public void StopSpawning()
     {
-        _spawning = true;
+        _okToSpawnPowerups = false;
+        _spawnPowerUp = false;
+        _spawnNegativePowerUp = false;
+    }
+    public void PlayerDeath()
+    {
+        _okToSpawnPowerups = false;
         _spawnPowerUp = false;
         _spawnNegativePowerUp = false;
     }
