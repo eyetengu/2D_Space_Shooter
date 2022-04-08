@@ -621,8 +621,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawning: 1
   _spawnPowerUp: 1
-  _spawnRarePowerUp: 0
-  _spawnEpicPowerUp: 1
   _spawnNegativePowerUp: 1
   _basicDelay: 0
   _rareDelay: 10
@@ -1326,8 +1324,36 @@ PrefabInstance:
       value: 0.009490967
       objectReference: {fileID: 0}
     - target: {fileID: 6800368712035025355, guid: 6424de482e54bf747808503580a765d7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800368712035025355, guid: 6424de482e54bf747808503580a765d7, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.1000061
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800368712348510312, guid: 6424de482e54bf747808503580a765d7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -3.1158
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800368712348510312, guid: 6424de482e54bf747808503580a765d7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -48.134
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800368712348510312, guid: 6424de482e54bf747808503580a765d7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 25.904
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800368712486574423, guid: 6424de482e54bf747808503580a765d7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 48.8388
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800368712486574423, guid: 6424de482e54bf747808503580a765d7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.00012361
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800368712486574423, guid: 6424de482e54bf747808503580a765d7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 146.31413
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6424de482e54bf747808503580a765d7, type: 3}
@@ -1344,7 +1370,7 @@ PrefabInstance:
       objectReference: {fileID: 1781958294941562193, guid: 15f069bb86f1c674cb5a1fb171157e95, type: 3}
     - target: {fileID: 1279856140, guid: 2911d5aaaf98267458dd11e4caaf2a57, type: 3}
       propertyPath: _hasFuel
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1279856140, guid: 2911d5aaaf98267458dd11e4caaf2a57, type: 3}
       propertyPath: _fuelCells
@@ -1352,7 +1378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1279856140, guid: 2911d5aaaf98267458dd11e4caaf2a57, type: 3}
       propertyPath: _fuelLevel
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1279856140, guid: 2911d5aaaf98267458dd11e4caaf2a57, type: 3}
       propertyPath: _bombPrefab

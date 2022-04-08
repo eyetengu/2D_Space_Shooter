@@ -6,10 +6,16 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Enemy2D : MonoBehaviour
 {
+//Enemy Components
     [SerializeField]
     private Animator _gameCameraAnimator;
-    
+    private Animator _animator;
+    private BoxCollider2D _collider;
     private SoundManager _soundManager;
+
+    [SerializeField]
+    private Player2D _player;
+    
     private Transform _enemyContainer;
 
 //Enemy Speed Parameters
@@ -19,14 +25,14 @@ public class Enemy2D : MonoBehaviour
     [SerializeField]
     private float _currentSpeed;
 
+    //enemy Shield
+    private bool _enemyShieldActive;
+    private int _randomShieldState = 0;
     [SerializeField]
-    private Player2D _player;
+    private GameObject _enemyShield;
 
-//Enemy Components
-    private Animator _animator;
-    private BoxCollider2D _collider;
 
-//Prototype Variables
+    //Prototype Variables
     //private bool speedBool = false;
 
     void Start()
@@ -39,34 +45,42 @@ public class Enemy2D : MonoBehaviour
             Debug.Log("Enemy2D.sc- EnemyContainer not found");
         }
         else { this.transform.SetParent(_enemyContainer); }
-
         _gameCameraAnimator = GameObject.Find("Main Camera").GetComponent<Animator>();
-        if(_gameCameraAnimator == null)
+        if (_gameCameraAnimator == null)
         {
             Debug.LogError("Enemy2D- Camera not found");
         }
         _player = GameObject.Find("Player_2D").GetComponent<Player2D>();
-        if(_player == null)
+        if (_player == null)
         {
             Debug.LogError("Enemy2D.cs- Player Script Not Found");
         }
-
         _animator = GetComponent<Animator>();
-        if(_animator == null)
+        if (_animator == null)
         {
             Debug.LogError("Enemy2D.cs- Animator not found");
         }
-
         _collider = GetComponent<BoxCollider2D>();
-        if(_collider == null)
+        if (_collider == null)
         {
             Debug.LogError("Enemy2d.cs- Unable to locate BoxCollider2D");
         }
-
         _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
-        if(_soundManager == null)
+        if (_soundManager == null)
         {
             Debug.LogError("Enemy2D.cs- SoundManager Not Found");
+        }
+
+        _randomShieldState = Random.Range(1, 100);
+        if (_randomShieldState > 60)
+        {
+            _enemyShieldActive = true;
+            _enemyShield.SetActive(true);
+        }
+        else
+        {
+            _enemyShieldActive = false;
+            _enemyShield.SetActive(false);
         }
     }
 
@@ -107,17 +121,25 @@ public class Enemy2D : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");            
             Destroy(this.gameObject, 2f);
         }
-
         if(other.tag == "Laser")
         {
-            //Debug.Log("Laser Contact");
-            _player.UpdateScore();
+            if( _enemyShieldActive == true)
+            {
+                _enemyShieldActive = false;
+                _enemyShield.SetActive(false);
+            }
 
-            _collider.enabled = false;
-            _animator.SetTrigger("OnEnemyDeath");
+            else if (_enemyShieldActive == false)
+            {
+                //Debug.Log("Laser Contact");
+                _player.UpdateScore();
+
+                _collider.enabled = false;
+                _animator.SetTrigger("OnEnemyDeath");
             
-            Destroy(other.gameObject);
-            Destroy(this.gameObject, 2f);
+                Destroy(other.gameObject);
+                Destroy(this.gameObject, 1f);
+            }
         }  
     }
 
@@ -141,10 +163,5 @@ public class Enemy2D : MonoBehaviour
     {
         _animator.SetTrigger("OnEnemyDeath");
         Destroy(this.gameObject);
-
     }
-
-
-
-
 }

@@ -9,13 +9,14 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField]
     private bool _spawning = true;
+    private bool _okToSpawnPowerups = true;
 
     [SerializeField]
     private bool _spawnPowerUp = true;
-    [SerializeField]
-    private bool _spawnRarePowerUp = true;
-    [SerializeField]
-    private bool _spawnEpicPowerUp = true;
+    //[SerializeField]
+    //private bool _spawnRarePowerUp = true;
+    //[SerializeField]
+    //private bool _spawnEpicPowerUp = true;
     [SerializeField]
     private bool _spawnNegativePowerUp = true;
 
@@ -51,12 +52,10 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] _negativePowerups;
 
-
-    //private float _rarePUTimer;
-
     void Start()
     {
         _enemyContainer = GameObject.Find("EnemyContainer");
+
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if(_uiManager == null)
         {
@@ -74,16 +73,15 @@ public class SpawnManager : MonoBehaviour
 
     public void Update()
     {
-            if (_spawnPowerUp == true)
-            {
-                StartCoroutine(SpawnPowerUpRoutine());
-            }
+        if (_spawnPowerUp == true && _okToSpawnPowerups == true)
+        {
+            StartCoroutine(SpawnPowerUpRoutine());
+        }
             
-            if(_spawnNegativePowerUp == true)
-            {
-                StartCoroutine(SpawnNegativePowerUpRoutine());
-            }
-        
+        if(_spawnNegativePowerUp == true && _okToSpawnPowerups == true)
+        {
+            StartCoroutine(SpawnNegativePowerUpRoutine());
+        }    
     }
 
     public void StartSpawning()
@@ -91,16 +89,13 @@ public class SpawnManager : MonoBehaviour
         if (_spawning == true)      
         {            
             StartCoroutine(WaveStart());
-
-            //StartCoroutine(SpawnBasicPowerUpRoutine());
-
-            //StartCoroutine(SpawnRarePowerUpRoutine());
         }
     }
     public void PlayerDeath()
-    {   
-        _spawning = false;
-        //_uiManager.GameOverMessage();
+    {
+        _okToSpawnPowerups = false;
+        _spawnPowerUp = false;
+        _spawnNegativePowerUp = false;
     }
 
     IEnumerator WaveStart()
@@ -118,7 +113,7 @@ public class SpawnManager : MonoBehaviour
             
             StartCoroutine(SpawnEnemyRoutine());            
         }
-        else if(_currentWave > _waveCounts.Length)
+        else 
         {
             Debug.Log("end the game");
             _gameManager.GameOver();
@@ -207,4 +202,10 @@ public class SpawnManager : MonoBehaviour
 
     }
 
+    public void StopSpawning()
+    {
+        _spawning = true;
+        _spawnPowerUp = false;
+        _spawnNegativePowerUp = false;
+    }
 }

@@ -60,8 +60,9 @@ public class Player2D : MonoBehaviour
     private int _lives = 3;
     private int _score = 0;
 
-//SpeedCenter
-    [SerializeField] 
+    //SpeedCenter
+    float fuelLevelCurrent;
+        [SerializeField] 
     private bool _isSpeedActive;
     [SerializeField]
     private bool _hasFuel = false;
@@ -131,13 +132,13 @@ public class Player2D : MonoBehaviour
 
     void Update()
     {
-        FuelCheck();
+        FuelCheck(fuelLevelCurrent);
         PlayerMovement();
         UIUpdate();
         WeaponsStatus();
     }
 
-    private void FuelCheck()
+    private void FuelCheck(float fuelLevelCurrent)
     {
         if(_fuelLevel > 100)
         { 
@@ -229,7 +230,6 @@ public class Player2D : MonoBehaviour
                     _speedVisualiser.SetActive(false);
                     _speedMultiplier = 1;
                     _isConsuming = false;
-
                 }                
             }            
         }
@@ -286,6 +286,7 @@ public class Player2D : MonoBehaviour
             _ammoCount -= 3;    
             if(_ammoCount < 1)
             { _ammoCount = 0; }
+            _uiManager.AmmoCountUpdate(_ammoCount, _maxAmmoCount);
         }
         else
         {
@@ -340,11 +341,13 @@ public class Player2D : MonoBehaviour
         }
         _isLaserActive = true;
         _gamePlayMessenger = 0;
+        _uiManager.AmmoCountUpdate(_ammoCount, _maxAmmoCount);
     }
     public void AcquiredSpeedBoost()
     {
         _fuelLevel += 20;
-        FuelCheck();
+        fuelLevelCurrent = _fuelLevel;
+        FuelCheck(fuelLevelCurrent);
     }
     public void AcquiredShields()
     {                
@@ -443,7 +446,7 @@ public class Player2D : MonoBehaviour
 
             if(_shields == 0)
             { 
-            _shieldVisualiser?.SetActive(false);
+            _shieldVisualiser.SetActive(false);
             _isShieldActive = false;
             }
         } 

@@ -89,7 +89,14 @@ public class UIManager : MonoBehaviour
     }
     public void AmmoCountUpdate(int _ammoCount, int _maxAmmoCount)
     {
-
+        if(_ammoCount < 1)
+        {
+            GamePlayMessages(1);
+        }
+        else if (_ammoCount > 0)
+        {
+            GamePlayMessages(0);
+        }
         string ammo = _ammoCount.ToString();
         string maxAmmo = _maxAmmoCount.ToString();
         _ammoText.text = ammo + "/" + maxAmmo;
