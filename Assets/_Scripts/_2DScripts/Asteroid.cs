@@ -19,18 +19,18 @@ public class Asteroid : MonoBehaviour
     void Start()
     {
         _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
-        if(_soundManager == null)
+            if(_soundManager == null)
         {
             Debug.LogError("Asteroid.cs- SoundManager Not Found");
         }
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
-        if( _spawnManager == null )
+            if( _spawnManager == null )
         {
             Debug.LogError("Asteroid.cs- SpawnManage is null");
         }
 
         _audioSource = GetComponent<AudioSource>();
-        if(_audioSource == null)
+            if(_audioSource == null)
         {
             Debug.LogError("Asteroid.cs- AudioSource is null");
         }
@@ -60,7 +60,7 @@ public class Asteroid : MonoBehaviour
         {
             _soundManager.ExplosionSound();
             _spawnManager.StartSpawning();
-
+            Debug.Log("I am ready to explode");
             Instantiate(_explosionVisual,transform.position,Quaternion.identity);
             Destroy(other.gameObject);
             

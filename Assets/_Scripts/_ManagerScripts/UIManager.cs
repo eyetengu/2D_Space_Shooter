@@ -62,7 +62,7 @@ public class UIManager : MonoBehaviour
         _ammoText = GameObject.Find("Ammo_text").GetComponent<Text>();
         _fuelLevelSlider = GameObject.Find("FuelLevel_slider").GetComponent<Slider>();
         if(_fuelLevelSlider == null)
-        { Debug.Log("UIManager- Fuel Level Indicator Missing");}
+        { Debug.LogError("UIManager- Fuel Level Indicator Missing");}
 
 
         //_fuelCellsSlider = GameObject.Find("FuelCell_Slider").GetComponent<Slider>();
@@ -79,7 +79,6 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateShieldsUI(int _shields)
     {
-        //Debug.Log("UIManager.cs- Shields");
         _shieldsImg.sprite = _shieldSprites[_shields];
         return;
     }
@@ -101,13 +100,12 @@ public class UIManager : MonoBehaviour
         string ammo = _ammoCount.ToString();
         string maxAmmo = _maxAmmoCount.ToString();
         _ammoText.text = ammo + "/" + maxAmmo;
-        //Debug.Log("Ready for Ammo Count");
     }
 
     public void FuelManager(float _fuelLevel) 
     {
         _fuelLevelSlider.value = _fuelLevel;
-        Debug.Log("UIManager- " + _fuelLevel);
+        //Debug.Log("UIManager- " + _fuelLevel);
     }
     
 //Message Center
@@ -122,7 +120,10 @@ public class UIManager : MonoBehaviour
                 _gamePlayMessages.text = "RELOAD";
                 break;
             case 2:
-                _gamePlayMessages.text = "Well Done. You Won!";
+                _gamePlayMessages.text = "You Won!";
+                StartCoroutine(YouWonFlickerRoutine());
+                break;
+            case 3:
                 break;
             default:
                 break;
@@ -144,6 +145,7 @@ public class UIManager : MonoBehaviour
                 _gameOverText.fontSize = 58;
                 _gameOverText.text = "You Won!";
                 _restartText.text = "Press R to Restart";
+                StartCoroutine(YouWonFlickerRoutine());
                 break;
             default:
                 break;
@@ -153,14 +155,15 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateWaveDisplay(int _currentWave)
     {
-        _gamePlayMessages.text = " ";
+        //_gamePlayMessages.text = " ";
+        //StartCoroutine(WaveDisplay(_currentWave));
         _gamePlayMessages.color = Color.magenta;
         _gamePlayMessages.text = "Wave: " + _currentWave;
         StartCoroutine(PlayMessageTimedErase());
     }
     public void UpdateEnemyInfo()
     {
-        _gamePlayMessages.text = " ";
+        //_gamePlayMessages.text = " ";
         //_gamePlayMessages.text = "All Enemies Have Been Eradicated";
         StartCoroutine(PlayMessageTimedErase());
     }
@@ -192,10 +195,31 @@ public class UIManager : MonoBehaviour
         
         GameOverSequence(1);
     }
+
+    IEnumerator YouWonFlickerRoutine()
+    {
+        _gameOverText.fontSize = 24;
+            yield return new WaitForSeconds(.25f);
+        _gameOverText.fontSize = 40;
+            yield return new WaitForSeconds(.25f);
+        _gameOverText.fontSize = 24;
+            yield return new WaitForSeconds(.25f);
+        _gameOverText.fontSize = 58;
+            yield return new WaitForSeconds(.25f);
+        GameOverSequence(2);
+    }
+
     IEnumerator PlayMessageTimedErase()
     {
         yield return new WaitForSeconds(2f);
         _gamePlayMessages.text = " ";
     }
+    
+    IEnumerator WaveDisplay(int _currentWave)
+    {
+        //_gamePlayMessages.text = "Wave: " + _currentWave;
+        //StartCoroutine(PlayMessageTimedErase());
 
+        yield return new WaitForSeconds(31f);
+    }
 }

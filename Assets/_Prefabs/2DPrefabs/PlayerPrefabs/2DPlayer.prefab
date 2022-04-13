@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7251411624699986216}
   - component: {fileID: 7251411624699986219}
   - component: {fileID: 7251411624699986217}
-  - component: {fileID: 1279856140}
-  - component: {fileID: 1904383596}
   - component: {fileID: 1904383593}
+  - component: {fileID: 1904383596}
+  - component: {fileID: 1279856140}
   m_Layer: 0
   m_Name: 2DPlayer
   m_TagString: Player
@@ -116,44 +116,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.288584, y: 4.2246423}
   m_EdgeRadius: 0
---- !u!114 &1279856140
-MonoBehaviour:
+--- !u!95 &1904383593
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7251411624699986221}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43ac5806d76ec5840ac57a9d0e99768d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spawnManager: {fileID: 0}
-  _gamePlayMessenger: 0
-  _enemy2d: {fileID: 7193922129189487523, guid: 28f691eea0a1a3d4b894d1071f09960f, type: 3}
-  _actualSpeed: 0
-  _laserPrefab: {fileID: 3677626486122912511, guid: a459de893d630654c965dce2c86760bf, type: 3}
-  _isLaserActive: 0
-  _tripleShotPrefab: {fileID: 3345876787413170926, guid: 92d4e0d849caabd4aaa82be614b4c3c6, type: 3}
-  _ammoCount: 15
-  _maxAmmoCount: 15
-  _bombPrefab: {fileID: 6636041533000924447, guid: a129ddd7337f8c34a9e01fa72069b84b, type: 3}
-  _explosionPrefab: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}
-  _isSecondaryEquipped: 0
-  cdtLaser: 5
-  _fuse: 2
-  _lives: 3
-  _leftEngine: {fileID: 3270709868150542370, guid: ffe344781a8ff9343a9576ed558d6744, type: 3}
-  _rightEngine: {fileID: 3270709868150542370, guid: ffe344781a8ff9343a9576ed558d6744, type: 3}
-  _isTripleShotActive: 0
-  _isSpeedActive: 1
-  _isShieldActive: 0
-  _shields: 0
-  _shieldVisualiser: {fileID: 4575332128187102190}
-  _speedVisualiser: {fileID: 6774374420874822744}
-  _fuelLevel: 0
-  _fuelCells: 3
-  _hasFuelCells: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6c9e96a4321566f488d33a305d844e94, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!82 &1904383596
 AudioSource:
   m_ObjectHideFlags: 0
@@ -161,7 +142,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7251411624699986221}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -250,25 +231,39 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!95 &1904383593
-Animator:
-  serializedVersion: 3
+--- !u!114 &1279856140
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7251411624699986221}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6c9e96a4321566f488d33a305d844e94, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43ac5806d76ec5840ac57a9d0e99768d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemy2d: {fileID: 7193922129189487523, guid: 28f691eea0a1a3d4b894d1071f09960f, type: 3}
+  _isLaserActive: 0
+  _isTripleShotActive: 0
+  _ammoCount: 15
+  _maxAmmoCount: 15
+  _laserPrefab: {fileID: 3677626486122912511, guid: a459de893d630654c965dce2c86760bf, type: 3}
+  _tripleShotPrefab: {fileID: 3345876787413170926, guid: 92d4e0d849caabd4aaa82be614b4c3c6, type: 3}
+  _isSecondaryEquipped: 0
+  _blastRadius: 0
+  _bombPrefab: {fileID: 1781958294941562193, guid: 15f069bb86f1c674cb5a1fb171157e95, type: 3}
+  bomb: {fileID: 1781958294941562193, guid: 15f069bb86f1c674cb5a1fb171157e95, type: 3}
+  _lives: 3
+  _isSpeedActive: 0
+  _shipHasFuel: 0
+  fuelLevelCurrent: 0
+  _isShieldActive: 0
+  _shields: 0
+  _leftEngine: {fileID: 3270709868150542370, guid: ffe344781a8ff9343a9576ed558d6744, type: 3}
+  _rightEngine: {fileID: 3270709868150542370, guid: ffe344781a8ff9343a9576ed558d6744, type: 3}
+  _shieldVisualiser: {fileID: 4575332128187102190}
+  _speedVisualiser: {fileID: 6774374420874822744}
 --- !u!1001 &2176471007016068696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -369,7 +364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3270709868150542370, guid: ffe344781a8ff9343a9576ed558d6744, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3548812970484144249, guid: ffe344781a8ff9343a9576ed558d6744, type: 3}
       propertyPath: m_RootOrder
@@ -447,7 +442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3270709868150542370, guid: ffe344781a8ff9343a9576ed558d6744, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3548812970484144249, guid: ffe344781a8ff9343a9576ed558d6744, type: 3}
       propertyPath: m_RootOrder

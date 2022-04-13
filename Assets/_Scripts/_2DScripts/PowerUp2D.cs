@@ -14,6 +14,10 @@ public class PowerUp2D : MonoBehaviour
     [SerializeField]            //0 = 3xShot, 1 = speed, 2 = shield, 3 = ammo, 4 = health, 5 = secondaryFire, 6 = negativePowerup
     private int _powerupID;
 
+    [SerializeField]
+    private GameObject _explosionPrefab;
+
+
     void Start()
     {   
         _player2d = GameObject.Find("Player_2D").GetComponent<Player2D>();
@@ -75,6 +79,14 @@ public class PowerUp2D : MonoBehaviour
                 }
 
             Destroy(this.gameObject);
+        }
+        if(other.tag == "EnemyLaser")
+        {
+            Debug.Log("Powerup hit by EnemyLaser");
+            _soundManager.ExplosionSound();
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+
         }
     }
 }

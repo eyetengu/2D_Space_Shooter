@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -1062374945656105039}
   m_Layer: 0
   m_Name: Powerup_Negative
-  m_TagString: Untagged
+  m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1620269789
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 6691643d9d08ede40bc93504dc8acb2e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93215c3025ca56447a5c8740ce40e4c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionPrefab: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}
+  _explosionPrefab: {fileID: 5477601558255320793, guid: 621c247009c845040a63efd69c0436d2, type: 3}
 --- !u!114 &-1062374945656105039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,3 +150,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3
   _powerupID: 6
+  _explosionPrefab: {fileID: 5477601558255320793, guid: 621c247009c845040a63efd69c0436d2, type: 3}

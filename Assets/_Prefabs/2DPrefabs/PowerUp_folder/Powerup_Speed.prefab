@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 8331069722019573655}
   - component: {fileID: -5879477903501807720}
   m_Layer: 0
-  m_Name: SpeedPowerup_prefab
-  m_TagString: Untagged
+  m_Name: Powerup_Speed
+  m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -166,4 +166,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3
   _powerupID: 1
-  _soundManager: {fileID: 0}
+  _explosionPrefab: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}

@@ -13,9 +13,8 @@ public class Player2D : MonoBehaviour
     private int _gamePlayMessenger;
 
 //Enemy
-    [SerializeField]
+    //[SerializeField]
     private Enemy2D _enemy2d;
-    //private bool _speedUpEnemy = false;
 
 //Player Speed
     private float _speed = 5f;
@@ -86,15 +85,8 @@ public class Player2D : MonoBehaviour
     [SerializeField]
     private GameObject _speedVisualiser;
 
-
-
-
-
-
-
     void Start()
     {
-
         _isLaserActive = true;
         Debug.Log("Start " + _isLaserActive);
 
@@ -110,12 +102,15 @@ public class Player2D : MonoBehaviour
             Debug.LogError("Player2D- no Animator found");
         }
 
-        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();        
         if(_uiManager == null)
         {
             Debug.LogError("Player.cs- No UIManager found");
         }
-        _fuelLevelThruster = GameObject.Find("Thruster_image");
+
+        _fuelLevelThruster = GameObject.Find("Handle");
+        if(_fuelLevelThruster == null)
+        { Debug.LogError("Player2D- fuel Level thruster missing"); }
         
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         if(_spawnManager == null)
@@ -159,20 +154,11 @@ public class Player2D : MonoBehaviour
             _shipHasFuel = false;
         }
         Debug.Log("Fuel- " + _fuelLevel + "%");
-        _uiManager.FuelManager(_fuelLevel);
+        if(_uiManager != null)
+        {
+            _uiManager.FuelManager(_fuelLevel);
+        }
     }
-    public void UpdateScore()
-    {
-        _score += 10;
-        _uiManager.UpdateScoreUI(_score);
-    }
-    private void UIUpdate()
-    {
-        _uiManager.AmmoCountUpdate(_ammoCount, _maxAmmoCount);
-        _uiManager.UpdateShieldsUI(_shields);
-        //_uiManager.FuelManager(_fuelLevel);
-    }
-
     private void PlayerMovement()
     {
         //Base Movement
@@ -214,7 +200,6 @@ public class Player2D : MonoBehaviour
         //SPEED BOOST
         if (_shipHasFuel)
         {
-
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 if (_isSpeedActive == false)
@@ -238,7 +223,6 @@ public class Player2D : MonoBehaviour
                     _speedMultiplier = 1;
                     _isConsuming = false;
                     _fuelLevelThruster.SetActive(false);
-
                 }
             }            
         }
@@ -248,10 +232,28 @@ public class Player2D : MonoBehaviour
             _speedVisualiser.SetActive(false);
             _speedMultiplier = 1;
             _isConsuming = false;
-            _fuelLevelThruster.SetActive(false);
+            if(_fuelLevelThruster != null)
+            {
+                _fuelLevelThruster.SetActive(false);
+            }
 
         }
     }
+    public void UpdateScore()
+    {
+        _score += 10;
+        _uiManager.UpdateScoreUI(_score);
+    }
+    private void UIUpdate()
+    {
+        if(_uiManager != null)
+        {
+            _uiManager.AmmoCountUpdate(_ammoCount, _maxAmmoCount);
+            _uiManager.UpdateShieldsUI(_shields);
+            //_uiManager.FuelManager(_fuelLevel);
+        }
+    }
+
     private void WeaponsStatus()
     {
         if (_isLaserActive == true && Input.GetKeyDown(KeyCode.Space) && (Time.time > _canFire))
@@ -451,6 +453,9 @@ public class Player2D : MonoBehaviour
     }
     public void TakeDamage()
     {
+        Debug.Log("Player Damaged- enemy");
+        _gameCameraAnimator.SetTrigger("CameraShake_trigger");
+
         if (_isShieldActive == true && _shields > -1)
         { 
             _shields--;
@@ -466,7 +471,7 @@ public class Player2D : MonoBehaviour
         {
             _lives --;
         }
-        _gameCameraAnimator.SetBool("CameraShake_bool", true);
+        //_gameCameraAnimator.SetBool("CameraShake_bool", true);
         StartCoroutine(ResetTrigger());
 
         switch (_lives)
@@ -482,7 +487,10 @@ public class Player2D : MonoBehaviour
                 break;
         }
 
-        _uiManager.UpdateHealthUI(_lives);
+        if(_uiManager != null)
+        {
+            _uiManager.UpdateHealthUI(_lives);
+        }
 
         if(_lives < 1)
         {

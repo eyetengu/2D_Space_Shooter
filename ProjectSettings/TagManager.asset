@@ -11,6 +11,7 @@ TagManager:
   - PowerUp
   - Bomb
   - Shell
+  - EnemyLaser
   layers:
   - Default
   - TransparentFX

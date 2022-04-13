@@ -9,11 +9,19 @@ public class NegativePowerUp2D : MonoBehaviour
     private float _speed = 1;
     [SerializeField]
     private GameObject _explosionPrefab;
+    private CircleCollider2D _circleCollider2D;
     
     void Start()
     {
         _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
+            if(_soundManager == null )
+        { Debug.LogError("NegPU- Sound Manager Missing"); }
         _player2d = GameObject.Find("Player_2D").GetComponent<Player2D>();
+            if(_player2d == null)
+        { Debug.LogError("NegPU- Player Missing"); }
+        _circleCollider2D = GetComponent<CircleCollider2D>();
+            if(_circleCollider2D == null)
+        { Debug.LogError("NegPowerUp- No Collider found"); }
     }
 
     void Update()
@@ -25,20 +33,23 @@ public class NegativePowerUp2D : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-            _soundManager.ExplosionSound();
-
             _player2d.TakeDamage();
-            Destroy(this.gameObject);
+            StartCoroutine(NegativePowerUpDestroyed());
         }
-        
-        else if(other.tag == "Laser")
+        else if (other.tag == "Laser" || other.tag == "EnemyLaser")
         {
-            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-            _soundManager.ExplosionSound();
             Destroy(other.gameObject);
-            Destroy(this.gameObject);
-
-        }
+            StartCoroutine(NegativePowerUpDestroyed());
+        }        
     }
+
+    IEnumerator NegativePowerUpDestroyed()
+    {
+        _circleCollider2D.enabled = false;
+        _soundManager.ExplosionSound();
+        Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
+        yield return new WaitForSeconds(.1f);
+    }
+
 }

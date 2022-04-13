@@ -11,22 +11,13 @@ public class SpawnManager : MonoBehaviour
     private bool _spawning = true;
     private bool _okToSpawnPowerups = true;
 
-    [SerializeField]
     private bool _spawnPowerUp = true;
-    //[SerializeField]
-    //private bool _spawnRarePowerUp = true;
-    //[SerializeField]
-    //private bool _spawnEpicPowerUp = true;
-    [SerializeField]
+
     private bool _spawnNegativePowerUp = true;
 
-    [SerializeField]
     private float _basicDelay = 5f;
-    [SerializeField]
     private float _rareDelay = 10f;
-    [SerializeField]
     private float _epicDelay = 15f;
-    [SerializeField]
     private float _negativeDelay = 6f;
 
 
@@ -98,8 +89,9 @@ public class SpawnManager : MonoBehaviour
         Debug.Log("Current Wave: " + (_currentWave + 1) + " Out of " + _maxWaves);
 
         if(_currentWave < _waveCounts.Length)
-        {            
-            _uiManager.UpdateWaveDisplay(_currentWave + 1);         
+        {
+            Debug.Log("Print to UI");
+            _uiManager.UpdateWaveDisplay(_currentWave);         
             _currentEnemies = 0;
             _spawning = false;                       
 
@@ -193,8 +185,6 @@ public class SpawnManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         _spawnNegativePowerUp= true;
-
-
     }
 
     public void StopSpawning()
