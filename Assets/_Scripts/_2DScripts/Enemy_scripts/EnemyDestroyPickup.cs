@@ -6,25 +6,21 @@ public class EnemyDestroyPickup : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] _powerups;
-
     [SerializeField]
     private GameObject _enemyLaser2D;
-
     [SerializeField]
     private bool _canFire = true;
 
     void Start()
     {
         if (_powerups == null)
-            Debug.Log("Powerups? We don't need no stinking powerups!");
+            Debug.Log("EnemyDestroyerPickup- no powerups found");
 
         //StartCoroutine(FireUponPickup());
-        Debug.Log("Dees ees dee Ess Ess Senterprice! Yield to Our Might");
     }
 
     void Update()
     {
-        Debug.Log("Resistance is Futile! Yield und Obey!");
         _powerups = GameObject.FindGameObjectsWithTag("PowerUp");
         foreach (GameObject powerup in _powerups)
         {

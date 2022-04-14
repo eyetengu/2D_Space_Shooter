@@ -54,18 +54,15 @@ public class Asteroid : MonoBehaviour
             Debug.Log("Are You Sure You Know What You're Doing?");
             Debug.Log("Touche");
             Debug.Log("My Impenetrable Skin is Triggerable");
-        }
-        
+        }        
         else if(other.tag == "Laser")
         {
             _soundManager.ExplosionSound();
             _spawnManager.StartSpawning();
             Debug.Log("I am ready to explode");
             Instantiate(_explosionVisual,transform.position,Quaternion.identity);
-            Destroy(other.gameObject);
-            
+            Destroy(other.gameObject);            
             Destroy(this.gameObject, .2f);
         }
-
     }
 }

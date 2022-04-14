@@ -17,4 +17,9 @@ public class EnemyLaserSingle_red : MonoBehaviour
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
         Destroy(this.gameObject, 2f);
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        //Destroy(this.gameObject);
+    }
 }

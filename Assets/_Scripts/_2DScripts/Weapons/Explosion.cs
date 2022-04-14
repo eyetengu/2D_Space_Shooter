@@ -21,7 +21,7 @@ public class Explosion : MonoBehaviour
         StartCoroutine(TimeDelay());
     }
 
-    public void ExplosiveAction()
+    public void ExplosiveAction101()
     {            
         Destroy(this.gameObject, .1f);
     }

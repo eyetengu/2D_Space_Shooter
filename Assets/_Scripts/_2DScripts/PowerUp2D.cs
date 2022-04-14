@@ -83,9 +83,10 @@ public class PowerUp2D : MonoBehaviour
         if(other.tag == "EnemyLaser")
         {
             Debug.Log("Powerup hit by EnemyLaser");
-            _soundManager.ExplosionSound();
+            //_soundManager.ExplosionSound();
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
+            Destroy(other.gameObject);
+            Destroy(this.gameObject, 1f);
 
         }
     }

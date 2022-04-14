@@ -12,14 +12,13 @@ public class Enemy2D_Smart : MonoBehaviour
     private GameObject _rearFire;
 
     private bool _canFire = true;
-    //private float speed = 2f;
 
     void Start()
     {
         _player2D = GameObject.Find("Player_2D").GetComponent<Player2D>();
         _playerTarget = GameObject.Find("Player_2D").GetComponent<Transform>();
     }
-    // Update is called once per frame
+
     void Update()
     {
         if(_playerTarget.position.y > this.transform.position.y && _canFire == true)
@@ -29,6 +28,7 @@ public class Enemy2D_Smart : MonoBehaviour
             StartCoroutine(RearFire());
         }
     }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Player_2D")
@@ -37,6 +37,7 @@ public class Enemy2D_Smart : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
     IEnumerator RearFire()
     { 
         Instantiate(_rearFire, transform.position, Quaternion.identity);
