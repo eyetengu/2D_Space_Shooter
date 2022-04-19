@@ -33,6 +33,9 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField]
     private GameObject[] _enemies;
+    [SerializeField]
+    private GameObject _ufoBoss;
+
 
     [SerializeField]
     private GameObject[] _basicPowerups;
@@ -42,6 +45,9 @@ public class SpawnManager : MonoBehaviour
     private GameObject[] _epicPowerups;
     [SerializeField]
     private GameObject[] _negativePowerups;
+
+    private Transform _bossSpawn;
+
 
     void Start()
     {
@@ -85,7 +91,9 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator WaveStart()
     {        
+
         _maxWaves = _waveCounts.Length;
+        Debug.Log(_waveCounts.Length);
         Debug.Log("Current Wave: " + (_currentWave + 1) + " Out of " + _maxWaves);
 
         if(_currentWave < _waveCounts.Length)
@@ -99,6 +107,13 @@ public class SpawnManager : MonoBehaviour
             
             StartCoroutine(SpawnEnemyRoutine());            
         }
+        else if(_currentWave == _maxWaves)
+        {
+            Debug.Log("Ready To Spawn UFO Madre");
+            //_bossSpawn.position = new Vector3(0, 11, 0);
+            Instantiate(_ufoBoss, transform.position, Quaternion.identity);
+        }
+
         else 
         {
             Debug.Log("end the game");

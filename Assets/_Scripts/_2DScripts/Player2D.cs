@@ -153,7 +153,7 @@ public class Player2D : MonoBehaviour
             _fuelLevel = 0;
             _shipHasFuel = false;
         }
-        Debug.Log("Fuel- " + _fuelLevel + "%");
+        //Debug.Log("Fuel- " + _fuelLevel + "%");
         if(_uiManager != null)
         {
             _uiManager.FuelManager(_fuelLevel);
@@ -404,7 +404,6 @@ public class Player2D : MonoBehaviour
         _isLaserActive = false;
         //yield return new WaitForSeconds(5f);
 
-
         for (int i = 0; i < 5; i++)
         {
             //_coolDownImage = i;
@@ -453,6 +452,7 @@ public class Player2D : MonoBehaviour
     }
     public void TakeDamage()
     {
+        Debug.Log("DAMAGED");
         Debug.Log("Player Damaged- enemy");
         _gameCameraAnimator.SetTrigger("CameraShake_trigger");
 
