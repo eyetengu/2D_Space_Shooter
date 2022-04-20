@@ -41,6 +41,7 @@ GameObject:
   - component: {fileID: 8432650944932407039}
   - component: {fileID: 8432650944932407036}
   - component: {fileID: 8432650944932407037}
+  - component: {fileID: 6399399684403848176}
   m_Layer: 0
   m_Name: Boss_MotherShip_AI
   m_TagString: Untagged
@@ -127,10 +128,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _travelSpeed: 1
+  _canTravel: 1
   _drone: {fileID: 3737018921362568700, guid: f8ec28c424d34344d8cd1629fdda901c, type: 3}
   _droneSpawnTransform: {fileID: 0}
-  _bombshell:
-  - {fileID: 5737197529381342684, guid: a1cab80cf082f394ca9c841c1f2e351a, type: 3}
-  - {fileID: 5737197529381342684, guid: 3a522a7c1499c164b90483320101bc2f, type: 3}
-  - {fileID: 5737197529381342684, guid: 78f6a13219aba724396000e8a7c3599a, type: 3}
-  - {fileID: 5737197529381342684, guid: f5d62b2590e459443beac0b090be4409, type: 3}
+  _timeToGo: 0
+  _bombshell: []
+  _shockWavePlus: {fileID: 3853182702035305036, guid: 305f657ab2cd172408eef4d96e286783, type: 3}
+  _shockWaveX: {fileID: 411625903265966674, guid: 8a67545cd53e703439f234d192106023, type: 3}
+--- !u!50 &6399399684403848176
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8432650944932407026}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

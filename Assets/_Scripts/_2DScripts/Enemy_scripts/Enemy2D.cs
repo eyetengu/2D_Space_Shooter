@@ -37,7 +37,7 @@ public class Enemy2D : MonoBehaviour
         //basic downward movement
         transform.position = new Vector3(Random.Range(-9, 9), 6, 0);
         _shield = transform.GetChild(0);
-        Debug.Log(_shield.childCount);
+        //Debug.Log(_shield.childCount);
         //set shield state
         _randomShieldState = Random.Range(1, 100);
         if (_randomShieldState > 60)

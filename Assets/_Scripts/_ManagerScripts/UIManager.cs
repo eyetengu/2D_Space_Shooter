@@ -36,6 +36,19 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Slider _fuelLevelSlider;
 
+    [SerializeField]
+    private GameObject _weaponSlot1b;
+    [SerializeField]
+    private GameObject _weaponSlot2a;
+    [SerializeField]
+    private GameObject _weaponSlot3a;
+    [SerializeField]
+    private Slider _coolDownSlider;
+    [SerializeField]
+    private Slider _enemyHealthSlider;
+    [SerializeField]
+    private GameObject _enemyHealthPanel;
+
     void Start()
     {
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
@@ -43,6 +56,8 @@ public class UIManager : MonoBehaviour
         { 
             Debug.LogError("UIManager.cs- Game Manager is null"); 
         }
+        
+        //_weaponSlot1b = GameObject.Find("WeapSlot1b");
 
         _livesImg = GameObject.Find("Health_img").GetComponent<Image>();
 
@@ -58,6 +73,8 @@ public class UIManager : MonoBehaviour
         _gameOverText = GameObject.Find("GameOver_text").GetComponent<Text>();
         _restartText = GameObject.Find("Restart_text").GetComponent<Text>();
         _gamePlayMessages = GameObject.Find("GamePlayMessages_text").GetComponent<Text>();
+        _gamePlayMessages.color = Color.red;
+        _gamePlayMessages.text = "Resign Yourself To Your Fate, mortal!";
         
         _ammoText = GameObject.Find("Ammo_text").GetComponent<Text>();
         _fuelLevelSlider = GameObject.Find("FuelLevel_slider").GetComponent<Slider>();
@@ -114,7 +131,7 @@ public class UIManager : MonoBehaviour
         switch(_gamePlayMessenger)
         {
             case 0:
-                _gamePlayMessages.text = "";
+                //  _gamePlayMessages.text = "";
                 break;
             case 1:
                 _gamePlayMessages.text = "RELOAD";
@@ -138,6 +155,7 @@ public class UIManager : MonoBehaviour
         {
             case 1:
                 _gameOverText.text = "Game Over!";
+                _restartText.fontSize = 20;
                 _restartText.text = "Press R to Restart";
                 StartCoroutine(GameOverFlickerRoutine());
                 break;
@@ -154,11 +172,9 @@ public class UIManager : MonoBehaviour
         _gameManager.GameOver();
     }
     public void UpdateWaveDisplay(int _currentWave)
-    {
-        //_gamePlayMessages.text = " ";
-        //StartCoroutine(WaveDisplay(_currentWave));
+    {       
         _gamePlayMessages.color = Color.magenta;
-        _gamePlayMessages.text = "Wave: " + _currentWave;
+        _gamePlayMessages.text = "Wave: " + (_currentWave + 1);
         StartCoroutine(PlayMessageTimedErase());
     }
     public void UpdateEnemyInfo()
@@ -211,7 +227,7 @@ public class UIManager : MonoBehaviour
 
     IEnumerator PlayMessageTimedErase()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(5f);
         _gamePlayMessages.text = " ";
     }
     
@@ -220,6 +236,50 @@ public class UIManager : MonoBehaviour
         //_gamePlayMessages.text = "Wave: " + _currentWave;
         //StartCoroutine(PlayMessageTimedErase());
 
-        yield return new WaitForSeconds(31f);
+        yield return new WaitForSeconds(.1f);
+    }
+
+//WeaponsBank
+    public void ActivateTripleShot(bool _isTripleShotActive)
+    {
+        Debug.Log("UIMGR: " + _isTripleShotActive);
+        _weaponSlot1b.SetActive(_isTripleShotActive);
+    }
+
+    public void ActivateSecondary(bool _isSecondaryEquipped)
+    {
+        _weaponSlot2a.SetActive(_isSecondaryEquipped);
+        if(_isSecondaryEquipped == false)
+        {
+            StartCoroutine(LaserCooldown());
+        }
+    }
+
+    public void ActivateMissile(bool _isHomingReady)
+    {
+        _weaponSlot3a.SetActive(_isHomingReady);
+    }
+
+    IEnumerator LaserCooldown()
+    {
+        _coolDownSlider.value = 10;
+        for (int i = 0; i < 10; i++)
+        {
+
+            yield return new WaitForSeconds(.5f);
+            _coolDownSlider.value -= 1;
+        }
+    }
+
+//EnemyHealthRoutine
+    public void EnemyBossHealth(int _ufoShield)
+    {
+        _enemyHealthPanel.SetActive(true);
+        _enemyHealthSlider.value = _ufoShield;
+
+        if(_enemyHealthSlider.value < 1)
+        {
+            _enemyHealthPanel.SetActive(false);
+        }    
     }
 }

@@ -16,7 +16,7 @@ public class PowerUp2D : MonoBehaviour
 
     [SerializeField]
     private GameObject _explosionPrefab;
-
+    private CircleCollider2D _circleCollider;
 
     void Start()
     {   
@@ -29,6 +29,11 @@ public class PowerUp2D : MonoBehaviour
         if(_soundManager == null)
         {
             Debug.LogError("PowerUp2D.cs- SoundManager Not Found");
+        }
+        _circleCollider = GetComponent<CircleCollider2D>();
+        if(_circleCollider == null)
+        {
+            //Debug.LogError("PowerUp2D- CircleCollider not found");
         }
 
         transform.position = new Vector3(Random.Range(-8, 8), 6, 0);
@@ -46,6 +51,8 @@ public class PowerUp2D : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        //_circleCollider.enabled = false;
+        
         if(other.tag == "Player")
         {
             _soundManager.PowerUpSound();

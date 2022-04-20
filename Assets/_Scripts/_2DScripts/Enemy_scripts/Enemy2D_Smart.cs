@@ -11,6 +11,9 @@ public class Enemy2D_Smart : MonoBehaviour
     [SerializeField]
     private GameObject _rearFire;
 
+    [SerializeField]
+    private BoxCollider2D _boxCollider;
+
     private bool _canFire = true;
 
     void Start()
@@ -21,11 +24,13 @@ public class Enemy2D_Smart : MonoBehaviour
 
     void Update()
     {
-        if(_playerTarget.position.y > this.transform.position.y && _canFire == true)
+        if(_playerTarget != null)
         {
-            //Debug.Log("Ready to fire behind me- smart enemy out");
-            _canFire = false;
-            StartCoroutine(RearFire());
+            if(_playerTarget.position.y > this.transform.position.y && _canFire == true)
+            {
+                _canFire = false;
+                StartCoroutine(RearFire());
+            }
         }
     }
 
@@ -33,6 +38,7 @@ public class Enemy2D_Smart : MonoBehaviour
     {
         if(other.tag == "Player_2D")
         {
+            _boxCollider.enabled = false;
             _player2D.TakeDamage();
             Destroy(this.gameObject);
         }
@@ -43,6 +49,5 @@ public class Enemy2D_Smart : MonoBehaviour
         Instantiate(_rearFire, transform.position, Quaternion.identity);
         yield return new WaitForSeconds(.45f);
         _canFire = true;
-
     }
 }

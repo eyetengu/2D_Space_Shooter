@@ -23,7 +23,7 @@ public class UFO_Drone : MonoBehaviour
 
     private bool _moving = true;
     
-    private int _ufoShield = 5;
+    private int _ufoShield = 10;
 
     private UIManager _uiManager;
     private GameManager _gameManager;
@@ -32,12 +32,14 @@ public class UFO_Drone : MonoBehaviour
     private GameObject _clusterBomb;
     [SerializeField]
     private GameObject _explosionPrefab;
+    [SerializeField]
+    private GameObject _enemyHealthPanel;
 
     void Start()
     {
         _player = GameObject.Find("Player_2D").GetComponent<Player2D>();
         if (_player == null)
-            Debug.LogError("UFO- Player not found");
+        { Debug.LogError("UFO- Player not found"); }
 
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (_uiManager == null)
@@ -50,12 +52,16 @@ public class UFO_Drone : MonoBehaviour
             Debug.LogError("SpawnManager.cs- Unable to Locate Game Manager");
         }
 
-
-
         _northEast = Vector3.Normalize(_northEast);
         _southEast = Vector3.Normalize(_southEast);
         _southWest = Vector3.Normalize(_southWest);
         _northWest = Vector3.Normalize(_northWest);
+
+        _enemyHealthPanel.SetActive(true);
+        _uiManager.EnemyBossHealth(_ufoShield);
+
+
+
     }
 
     void Update()
@@ -128,7 +134,7 @@ public class UFO_Drone : MonoBehaviour
         {
             _player.TakeDamage();
         }
-        if(other.tag == "Laser")
+        if(other.tag == "Laser" || other.tag == "EnemyLaser" || other.tag == "Bomb")
         {
             Destroy(other.gameObject);
             UFOTakeDamage();
@@ -138,11 +144,12 @@ public class UFO_Drone : MonoBehaviour
     private void UFOTakeDamage()
     {
         _ufoShield--;
+        _uiManager.EnemyBossHealth(_ufoShield);
         if (_ufoShield < 1)
         {
+            UFODeath();
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject, .1f);
-            UFODeath();
         }
     }
 

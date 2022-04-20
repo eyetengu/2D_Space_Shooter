@@ -23,6 +23,11 @@ public class EnemyBoss_Mothership_AI : MonoBehaviour
     [SerializeField]
     private GameObject[] _bombshell;
 
+    [SerializeField]
+    private GameObject _shockWavePlus;
+    [SerializeField]
+    private GameObject _shockWaveX;
+
     void Start()
     {
         transform.position = new Vector3(0, 11, 0);
@@ -50,12 +55,12 @@ public class EnemyBoss_Mothership_AI : MonoBehaviour
         else
         {
             _canTravel = false;
+            StartCoroutine(ExplosiveRounds());
             if(_sendDrones == true)
             {
                 StartCoroutine(CountdownToDrones());
                 if(_explosiveRoundsActive == true)
                 {
-                    StartCoroutine(ExplosiveRounds());
                 }
             }
         }
@@ -69,7 +74,7 @@ public class EnemyBoss_Mothership_AI : MonoBehaviour
 
         transform.Translate(Vector3.up * _travelSpeed * 3 * Time.deltaTime);
 
-        if(transform.position.y >= 11f)
+        if(transform.position.y >= 12f)
         {
             _timeToGo = false;
         }        
@@ -96,18 +101,17 @@ public class EnemyBoss_Mothership_AI : MonoBehaviour
     IEnumerator ExplosiveRounds()
     {
         _explosiveRoundsActive = false;
-        for(int i = 0; i < _bombshell.Length; i++)
-        {
-            Debug.Log("Explosive shell sent in " + _compassDirection);//send out an explosiveShell in direction 0, 45, 90, 135, 180,225, 270, 315
-            Instantiate(_bombshell[i], _droneSpawnTransform.position, Quaternion.identity);
+        
+            Instantiate(_shockWavePlus, transform.position, Quaternion.identity);
 
-            //wait for .75 seconds
-            yield return new WaitForSeconds(3f);
-            _compassDirection += 45;
-            if(_compassDirection > 315)
-            {
-            }
-        }
+
+            yield return new WaitForSeconds(1f);
+            Instantiate(_shockWaveX, transform.position, Quaternion.identity);
+
+            yield return new WaitForSeconds(1f);
+            Instantiate(_shockWavePlus, transform.position, Quaternion.identity);
+
+        
 
         //launch several explosive rounds. they act as flak and cause damage on explosion
         //each round will have a blast radius that can damage the player

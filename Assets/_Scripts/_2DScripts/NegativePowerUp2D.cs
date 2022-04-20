@@ -6,31 +6,57 @@ public class NegativePowerUp2D : MonoBehaviour
 {
     private SoundManager _soundManager;
     private Player2D _player2d;
-    private float _speed = 1;
+    private Animator _thisAnimator;
+    [SerializeField]
+    private float _speed = 2f;
+
+    //[SerializeField]            //0 = 3xShot, 1 = speed, 2 = shield, 3 = ammo, 4 = health, 5 = secondaryFire, 6 = negativePowerup
+    //private int _negativeID;
+
     [SerializeField]
     private GameObject _explosionPrefab;
-    private CircleCollider2D _circleCollider2D;
-    
+    private CircleCollider2D _circleCollider;
+
     void Start()
     {
-        _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
-            if(_soundManager == null )
-        { Debug.LogError("NegPU- Sound Manager Missing"); }
         _player2d = GameObject.Find("Player_2D").GetComponent<Player2D>();
-            if(_player2d == null)
-        { Debug.LogError("NegPU- Player Missing"); }
-        _circleCollider2D = GetComponent<CircleCollider2D>();
-            if(_circleCollider2D == null)
-        { Debug.LogError("NegPowerUp- No Collider found"); }
+        if (_player2d == null)
+        {
+            Debug.LogError("PowerUp2D.cs- Player2D is missing in action");
+        }
+        _thisAnimator = GetComponent<Animator>();
+        if( _thisAnimator == null)
+        {
+            Debug.LogError("NegPowerup- no animator found");
+        }
+        _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
+        if (_soundManager == null)
+        {
+            Debug.LogError("PowerUp2D.cs- SoundManager Not Found");
+        }
+        _circleCollider = GetComponent<CircleCollider2D>();
+        if (_circleCollider == null)
+        {
+            //Debug.LogError("PowerUp2D- CircleCollider not found");
+        }
+
+        transform.position = new Vector3(Random.Range(-8, 8), 6, 0);
     }
 
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
+
+        if (transform.position.y < -7f)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        //_soundManager.ExplosionSound();
+        //Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
         if (other.tag == "Player")
         {
             _player2d.TakeDamage();
@@ -45,10 +71,11 @@ public class NegativePowerUp2D : MonoBehaviour
 
     IEnumerator NegativePowerUpDestroyed()
     {
-        _circleCollider2D.enabled = false;
+        //_circleCollider2D.enabled = false;
+        Debug.Log("NegativePowerUp Destroyed");
         _soundManager.ExplosionSound();
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-        Destroy(this.gameObject);
+        Destroy(this.gameObject, .1f);
         yield return new WaitForSeconds(.1f);
     }
 

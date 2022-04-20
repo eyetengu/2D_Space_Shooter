@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6375788997340810135}
   m_Layer: 0
   m_Name: UFO_Drone
-  m_TagString: Enemy
+  m_TagString: EnemyBoss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,9 +98,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementDir: 0
   _maxTime: 3.5
-  _northEast: {x: 1, y: 1, z: 0}
   _clusterBomb: {fileID: 2074303055443558502, guid: a8467d1a9d88afe4d94f3c6db7d85e69, type: 3}
   _explosionPrefab: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}
+  _enemyHealthPanel: {fileID: 6800368711242567432, guid: 6424de482e54bf747808503580a765d7, type: 3}
 --- !u!58 &6375788997340810135
 CircleCollider2D:
   m_ObjectHideFlags: 0

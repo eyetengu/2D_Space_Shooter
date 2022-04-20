@@ -15,10 +15,10 @@ public class SpawnManager : MonoBehaviour
 
     private bool _spawnNegativePowerUp = true;
 
-    private float _basicDelay = 5f;
-    private float _rareDelay = 10f;
-    private float _epicDelay = 15f;
-    private float _negativeDelay = 6f;
+    //private float _basicDelay = 5f;
+    //private float _rareDelay = 10f;
+    //private float _epicDelay = 15f;
+    //private float _negativeDelay = 6f;
 
 
     [SerializeField]
@@ -47,7 +47,7 @@ public class SpawnManager : MonoBehaviour
     private GameObject[] _negativePowerups;
 
     private Transform _bossSpawn;
-
+    private bool _powerUpSpawning = false;
 
     void Start()
     {
@@ -70,6 +70,23 @@ public class SpawnManager : MonoBehaviour
 
     public void Update()
     {
+        if(_powerUpSpawning == true)
+        {
+            PowerUpSpawning();
+        }
+    }
+
+    public void StartSpawning()
+    {
+        _powerUpSpawning = true;
+        if (_spawning == true)      
+        {            
+            StartCoroutine(WaveStart());
+        }
+    }
+
+    public void PowerUpSpawning()
+    {
         if (_spawnPowerUp == true && _okToSpawnPowerups == true)
         {
             StartCoroutine(SpawnPowerUpRoutine());
@@ -81,25 +98,18 @@ public class SpawnManager : MonoBehaviour
         }    
     }
 
-    public void StartSpawning()
-    {
-        if (_spawning == true)      
-        {            
-            StartCoroutine(WaveStart());
-        }
-    }
-
     IEnumerator WaveStart()
     {        
 
         _maxWaves = _waveCounts.Length;
         Debug.Log(_waveCounts.Length);
         Debug.Log("Current Wave: " + (_currentWave + 1) + " Out of " + _maxWaves);
+        _uiManager.UpdateWaveDisplay(_currentWave);         
+        
 
         if(_currentWave < _waveCounts.Length)
         {
             Debug.Log("Print to UI");
-            _uiManager.UpdateWaveDisplay(_currentWave);         
             _currentEnemies = 0;
             _spawning = false;                       
 
@@ -110,7 +120,7 @@ public class SpawnManager : MonoBehaviour
         else if(_currentWave == _maxWaves)
         {
             Debug.Log("Ready To Spawn UFO Madre");
-            //_bossSpawn.position = new Vector3(0, 11, 0);
+            _uiManager.UpdateWaveDisplay(_currentWave);
             Instantiate(_ufoBoss, transform.position, Quaternion.identity);
         }
 
@@ -122,9 +132,10 @@ public class SpawnManager : MonoBehaviour
             PlayerDeath();
         }
 
-        _currentEnemyMax = _waveCounts[_currentWave];
+        if(_currentEnemyMax > 0 && _waveCounts != null)
+            _currentEnemyMax = _waveCounts[_currentWave];
         if(_currentEnemyMax < 1)
-        { _currentEnemyMax = 0; }
+            { _currentEnemyMax = 0; }
 
         Debug.Log("Current Max Enemies: " + _currentEnemyMax);
     }
@@ -210,8 +221,7 @@ public class SpawnManager : MonoBehaviour
     }
     public void PlayerDeath()
     {
-        _okToSpawnPowerups = false;
-        _spawnPowerUp = false;
-        _spawnNegativePowerUp = false;
+        _powerUpSpawning = false;
+        StopSpawning();
     }
 }

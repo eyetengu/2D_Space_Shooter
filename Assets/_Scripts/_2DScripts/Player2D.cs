@@ -50,10 +50,13 @@ public class Player2D : MonoBehaviour
     private GameObject _bombPrefab;
     [SerializeField]
     private GameObject bomb;
-    //[SerializeField]
+    [SerializeField]
+    private GameObject _homingMissile;
+
+    private bool _isHomingReady = true;
     //public float _fuse = 2f;
 
-//Health & Score
+    //Health & Score
     [SerializeField]
     private int _lives = 3;
     private int _score = 0;
@@ -88,7 +91,7 @@ public class Player2D : MonoBehaviour
     void Start()
     {
         _isLaserActive = true;
-        Debug.Log("Start " + _isLaserActive);
+        //Debug.Log("Start " + _isLaserActive);
 
         _gameCameraAnimator = GameObject.Find("Main Camera").GetComponent<Animator>();
         if(_gameCameraAnimator == null )
@@ -127,6 +130,8 @@ public class Player2D : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
 
         Cursor.lockState = CursorLockMode.Locked;
+        _uiManager.ActivateMissile(_isHomingReady);
+
     }
 
     void Update()
@@ -277,10 +282,30 @@ public class Player2D : MonoBehaviour
         if (_isSecondaryEquipped == true && Input.GetKey(KeyCode.E))
         {
             Debug.Log("Secondary Fired");
+
             StartCoroutine(SecondaryFire());    
         }
 
+        if(Input.GetKeyDown(KeyCode.Q) && _isHomingReady == true)
+        {
+            Instantiate(_homingMissile, transform.position, Quaternion.identity);
+            StartCoroutine(CooldownHomingMissile());
+        }
+
     }
+
+    IEnumerator CooldownHomingMissile()
+    {
+        _isHomingReady = false;
+        _uiManager.ActivateMissile(_isHomingReady);
+        yield return new WaitForSeconds(3.0f);
+        _isHomingReady = true;
+        _uiManager.ActivateMissile(_isHomingReady);
+
+    }
+
+
+
     private void FireLaser()
     {
         //Debug.Log("FireLaser() " + _isLaserActive);
@@ -312,11 +337,12 @@ public class Player2D : MonoBehaviour
     
     IEnumerator SecondaryFire()
     {
-            Instantiate(_bombPrefab, transform.position , Quaternion.identity);
+        Instantiate(_bombPrefab, transform.position , Quaternion.identity);
             
-            _isSecondaryEquipped = false;     
-        
-            StartCoroutine(CoolDownTimerLaser());
+        _isSecondaryEquipped = false;
+        _uiManager.ActivateSecondary(_isSecondaryEquipped);
+
+        StartCoroutine(CoolDownTimerLaser());
         yield return new WaitForSeconds(.1f);
             //_explosionTransform = _bombTransform;
     }
@@ -336,17 +362,20 @@ public class Player2D : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         _gameCameraAnimator.SetBool("CameraShake_bool", false);
+        Debug.Log("Player2D- anim bool false");
     }
 
 //PowerUp Logic
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
+        _uiManager.ActivateTripleShot(_isTripleShotActive);
         StartCoroutine(TripleShotPowerDownRoutine());
     }
     public void AcquiredSecondaryFire()
     {
         _isSecondaryEquipped = true;
+        _uiManager.ActivateSecondary(_isSecondaryEquipped);
     }
     public void AmmoIncrease()
     {
@@ -418,6 +447,8 @@ public class Player2D : MonoBehaviour
         //_tripleShotPrefab;
         yield return new WaitForSeconds(5.0f);
         _isTripleShotActive = false;
+        _uiManager.ActivateTripleShot(_isTripleShotActive);
+
     }
     IEnumerator ShieldPowerDownRoutine()
     {
@@ -443,8 +474,7 @@ public class Player2D : MonoBehaviour
                 if(distance < _blastRadius && enemy != null)
                 {
                     _enemy2d.EnemyTakeDamage();
-                }
-            
+                }            
         }
         //yield return new WaitForSeconds(remainingCooldownTime);
         _isLaserActive = true;
@@ -452,8 +482,6 @@ public class Player2D : MonoBehaviour
     }
     public void TakeDamage()
     {
-        Debug.Log("DAMAGED");
-        Debug.Log("Player Damaged- enemy");
         _gameCameraAnimator.SetTrigger("CameraShake_trigger");
 
         if (_isShieldActive == true && _shields > -1)
@@ -470,8 +498,9 @@ public class Player2D : MonoBehaviour
         else 
         {
             _lives --;
+            Debug.Log("Lives: " + _lives);
         }
-        //_gameCameraAnimator.SetBool("CameraShake_bool", true);
+        _gameCameraAnimator.SetBool("CameraShake_bool", true);
         StartCoroutine(ResetTrigger());
 
         switch (_lives)
@@ -479,6 +508,8 @@ public class Player2D : MonoBehaviour
             case 2:
                 _leftEngine.SetActive(true);
                 _rightEngine.SetActive(false);
+                Debug.Log("Player Switch Statement");
+
                 break;
             case 1:
                 _rightEngine.SetActive(true);

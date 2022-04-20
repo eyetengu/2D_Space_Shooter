@@ -5,6 +5,8 @@ using UnityEngine;
 public class ClusterBomb : MonoBehaviour
 {
     private Player2D _player;
+    private SoundManager _soundManager;
+
     [SerializeField]
     private int _bombShellID;
 
@@ -18,14 +20,19 @@ public class ClusterBomb : MonoBehaviour
 
     void Start()
     {
-        _player = GameObject.Find("Player_2D").GetComponent<Player2D>();
         _northEast = Vector3.Normalize(_northEast);
         _southEast = Vector3.Normalize(_southEast);
         _southWest = Vector3.Normalize(_southWest);
         _northWest = Vector3.Normalize(_northWest);
+
+        _player = GameObject.Find("Player_2D").GetComponent<Player2D>();
+        if(_player == null)
+        {
+            Debug.LogError("ClusterBomb: Unable to locate player");
+        }
+        _soundManager = GameObject.Find("Sound_Manager").GetComponent<SoundManager>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         switch(_bombShellID)
@@ -67,6 +74,7 @@ public class ClusterBomb : MonoBehaviour
         if(other.tag == "Player")
         {
             _player.TakeDamage();
+            _soundManager.ExplosionSound();
             Destroy(this.gameObject);
         }
     }

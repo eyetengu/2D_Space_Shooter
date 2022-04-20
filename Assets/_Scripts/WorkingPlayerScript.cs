@@ -7,8 +7,8 @@ public class WorkingPlayerScript : MonoBehaviour
     [SerializeField]
     private CharacterController _player;
 
-    [SerializeField]
-    private float _gravity = -9.81f;
+    //[SerializeField]
+    //private float _gravity = -9.81f;
 
     [SerializeField]
     private float _speed = 3.5f;
@@ -17,11 +17,11 @@ public class WorkingPlayerScript : MonoBehaviour
     [SerializeField]
     private float _speedometer;
 
-    [SerializeField]
-    float _sensitivity = 1;
+    //[SerializeField]
+    //float _sensitivity = 1;
 
-    [SerializeField]
-    private bool _isRunning;
+    //[SerializeField]
+    private bool _isRunning = false;
 
     void Start()
     {

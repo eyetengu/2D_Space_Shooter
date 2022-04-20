@@ -9,7 +9,7 @@ public class Movement_ZigZag : MonoBehaviour
 
     public float _speed = 1;
     public float _delay = 1;
-    private int _duration = 0;
+    //private int _duration = 0;
 
     [SerializeField]
     private bool _zigZag;

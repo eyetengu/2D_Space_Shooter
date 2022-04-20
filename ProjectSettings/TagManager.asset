@@ -12,6 +12,8 @@ TagManager:
   - Bomb
   - Shell
   - EnemyLaser
+  - ClusterBombShells
+  - EnemyBoss
   layers:
   - Default
   - TransparentFX

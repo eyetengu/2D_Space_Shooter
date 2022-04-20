@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3592479896436495255}
   - component: {fileID: 3592479896436495252}
   - component: {fileID: 3592479896436495248}
-  - component: {fileID: -1062374945656105039}
+  - component: {fileID: 4814641243811184659}
   m_Layer: 0
   m_Name: Powerup_Negative
   m_TagString: PowerUp
@@ -135,19 +135,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93215c3025ca56447a5c8740ce40e4c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionPrefab: {fileID: 5477601558255320793, guid: 621c247009c845040a63efd69c0436d2, type: 3}
---- !u!114 &-1062374945656105039
-MonoBehaviour:
+  _speed: 2
+  _explosionPrefab: {fileID: 5703456947959403886, guid: d6775c67f06eae040b17ca736b34e8af, type: 3}
+--- !u!95 &4814641243811184659
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3592479896436495251}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dbe551ab73909d4cb2925a70a354e83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 3
-  _powerupID: 6
-  _explosionPrefab: {fileID: 5477601558255320793, guid: 621c247009c845040a63efd69c0436d2, type: 3}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3373e08d09abb2b4896a20aabdf9c13c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

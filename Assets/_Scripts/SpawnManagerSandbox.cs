@@ -27,7 +27,7 @@ public class SpawnManagerSandbox : MonoBehaviour
 
     [SerializeField]
     private bool _rareSpawn = false;
-    private int _rareDelay = 10;
+    //private int _rareDelay = 10;
     //[SerializeField]
     //public Transform _rarePowerupPrefab;
     [SerializeField]
@@ -35,7 +35,7 @@ public class SpawnManagerSandbox : MonoBehaviour
 
     [SerializeField]
     private bool _epicSpawn = true;
-    private int _epicDelay = 2;
+    //private int _epicDelay = 2;
     [SerializeField]
     private Transform[] _epicPowerupTransform;
 
